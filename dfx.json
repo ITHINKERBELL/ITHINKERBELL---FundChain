@@ -1,0 +1,30 @@
+{
+  "canisters": {
+    "project_backend": {
+      "build": "npx azle project_backend",
+      "candid": "src/project_backend/project_backend.did",
+      "gzip": true,
+      "main": "src/project_backend/src/index.ts",
+      "type": "custom",
+      "wasm": ".azle/project_backend/project_backend.wasm"
+    },
+    "project_frontend": {
+      "dependencies": [
+        "project_backend"
+      ],
+      "source": [
+        "src/project_frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "project_frontend"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
