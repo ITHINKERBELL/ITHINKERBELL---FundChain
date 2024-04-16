@@ -15,5 +15,8 @@
   "workspaces": [
     "src/project_backend",
     "src/project_frontend"
-  ]
+  ],
+  "dependencies": {
+    "react-router-dom": "^6.22.3"
+  }
 }
