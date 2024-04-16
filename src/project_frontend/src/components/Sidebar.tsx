@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHouse, faScroll, faUser, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { faHouse, faScroll, faUser, faRightFromBracket, faSquarePlus } from '@fortawesome/free-solid-svg-icons';
 
 const Sidebar: React.FC = () => {
   return (
@@ -12,6 +12,12 @@ const Sidebar: React.FC = () => {
         </div>
       </a>
 
+      {/*add campaigns*/}
+      <a href="">
+        <div className="h-10 w-10 flex items-center justify-center rounded-lg cursor-pointer hover:bg-gray-800 hover:text-white hover:duration-300 hover:ease-linear focus:bg-gray-800">
+          <FontAwesomeIcon icon={faSquarePlus} />
+        </div>
+      </a>
 
       {/*campaigns*/}
       <div className="h-10 w-10 flex items-center justify-center rounded-lg cursor-pointer hover:bg-gray-800 hover:text-white hover:duration-300 hover:ease-linear focus:bg-gray-800">
