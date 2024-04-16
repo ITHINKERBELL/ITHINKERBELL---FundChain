@@ -47,10 +47,10 @@ const CreateCampaign: React.FC = () => {
   }
 
   return (
-    <div className="bg-[#1f1e1c] flex justify-center items-center flex-col rounded-[10px] sm:p-10 p-4">
+    <div className="border-[#1f1e1c] flex justify-center items-center flex-col rounded-[10px] sm:p-10 p-4">
       {isLoading && <Loader />}
-      <div className="flex justify-center items-center p-[16px] sm:min-w-[380px]">
-        <h1 className="font-epilogue font-bold sm:text-[25px] text-[18px] leading-[38px] text-white">Start a Campaign</h1>
+      <div className="flex justify-center items-center p-[16px] sm:min-w-[380px] bg-gray-100 rounded-lg">
+        <h1 className="font-epilogue font-bold sm:text-[25px] text-[18px] leading-[38px] text-gray-800">Start a Campaign</h1>
       </div>
 
       <form onSubmit={handleSubmit} className="w-full mt-[65px] flex flex-col gap-[30px]">
@@ -109,7 +109,7 @@ const CreateCampaign: React.FC = () => {
             <CustomButton 
               btnType="submit"
               title="Submit new campaign"
-              styles="bg-white"
+              styles="bg-[#1f1e1c]"
               handleClick={() => {}}
             />
           </div>
