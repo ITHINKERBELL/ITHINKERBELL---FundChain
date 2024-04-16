@@ -1,6 +1,8 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faScroll, faUser, faRightFromBracket, faSquarePlus } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
+
 
 const Sidebar: React.FC = () => {
   return (
@@ -13,11 +15,13 @@ const Sidebar: React.FC = () => {
       </a>
 
       {/*add campaigns*/}
+      <Link to="/create-campaign">
       <a href="">
         <div className="h-10 w-10 flex items-center justify-center rounded-lg cursor-pointer hover:bg-gray-800 hover:text-white hover:duration-300 hover:ease-linear focus:bg-gray-800">
           <FontAwesomeIcon icon={faSquarePlus} />
         </div>
       </a>
+      </Link>
 
       {/*campaigns*/}
       <div className="h-10 w-10 flex items-center justify-center rounded-lg cursor-pointer hover:bg-gray-800 hover:text-white hover:duration-300 hover:ease-linear focus:bg-gray-800">
