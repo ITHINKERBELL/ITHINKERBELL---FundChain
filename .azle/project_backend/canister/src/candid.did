@@ -1,4 +1,5 @@
 service: () -> {
     createCampaign: (text, text, text, nat, nat, text) -> (int);
+    getAllCampaigns: () -> (vec record {title:text; owner:text; amountCollected:nat; description:text; deadline:nat; donators:vec text; target:nat; image:text; donations:vec int}) query;
     greet: (text) -> (text) query;
 }

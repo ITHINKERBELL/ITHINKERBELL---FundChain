@@ -51,5 +51,9 @@ export default Canister({
         return BigInt(campaignCount);
     }),
 
+    getAllCampaigns: query([], Vec(Campaign), () => {
+        return campaigns.values();
+    })
+
 })
  

@@ -100757,6 +100757,9 @@ var src_default = Canister({
         campaigns.insert(_owner, newCampaign);
         campaignCount++;
         return BigInt(campaignCount);
+    }),
+    getAllCampaigns: query([], Vec2(Campaign), ()=>{
+        return campaigns.values();
     })
 });
 // <stdin>
