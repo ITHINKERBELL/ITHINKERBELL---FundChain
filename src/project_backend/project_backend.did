@@ -1,3 +1,4 @@
 service: () -> {
+    createCampaign: (text, text, text, nat, nat, text) -> (int);
     greet: (text) -> (text) query;
 }
