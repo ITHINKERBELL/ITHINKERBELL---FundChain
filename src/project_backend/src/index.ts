@@ -1,4 +1,23 @@
 import { Canister, query, Record, text, Opt, Vec, int, StableBTreeMap, Principal, update, nat } from 'azle';
+import { checkEveryInputForSignup } from './util/checkValidation';
+
+// Define the User record type
+const User = Record({
+    id: Principal,
+    email: text,
+    username: text,
+    password: text,
+    userType: text,
+    name: Record({
+        firstName: text,
+        lastName: text,
+        middleName: text,
+        birthday: text
+    })
+})
+
+type User = typeof User.tsType;
+export let users = StableBTreeMap<Principal, User>(0)
 
 const CampaignId = text;
 
@@ -26,7 +45,29 @@ export default Canister({
     greet: query([text], text, (name) => {
         return `Hello, ${name}!`;
     }),
-
+    userRegistration: update([text, text, text, text, text, text, text, text], text, async (email, username, password, userType, firstName, lastName, middleName, birthday) => {
+        // Checks whether the user's entered username, email, and password are valid and available
+        const checkerForInput = await checkEveryInputForSignup(username, email, password, userType, birthday);
+        if(checkerForInput.message === "success"){
+            const id = generateId();
+            // Bcrypt is used to encrypt the entered password
+            const newUser: User = {
+                id,
+                email,
+                username,
+                password,
+                userType,
+                name: {
+                    firstName,
+                    lastName,
+                    middleName,
+                    birthday
+                }
+            };
+            users.insert(newUser.id, newUser)
+        }
+        return checkerForInput.message
+    }),
 
     createCampaign: update([text, text, text, nat, nat, text], int, async (_owner: string, _title: string, _description: string, _target: nat, _deadline: nat, _image: string) => {
         // if (_deadline <= Date.now()) {
@@ -57,3 +98,10 @@ export default Canister({
 
 })
  
+function generateId(): Principal {
+    const randomBytes = new Array(29)
+        .fill(0)
+        .map((_) => Math.floor(Math.random() * 256));
+
+    return Principal.fromUint8Array(Uint8Array.from(randomBytes));
+}
