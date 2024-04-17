@@ -70,7 +70,18 @@ export default Canister({
     }),
     getAllUsers: query([], Vec(User), () => {
         return users.values()
-    }),
+    }), 
+    getUserByEmail: query([text], text, (email) => {{
+        let foundUser = null;
+        let allUsers = users.values();
+        for (let user of allUsers) {{
+            if (user.email.toLowerCase() === email.toLowerCase()) {{
+                foundUser = user;
+                break;
+            }}
+        }}
+        return JSON.stringify(foundUser);
+    }}),
     createCampaign: update([text, text, text, nat, nat, text], int, async (_owner: string, _title: string, _description: string, _target: nat, _deadline: nat, _image: string) => {
         // if (_deadline <= Date.now()) {
         //     throw new Error("The deadline should be a date in the future.");
