@@ -1,1 +1,1 @@
-{"canister_methods":{"queries":[{"name":"greet","composite":false},{"name":"getAllCampaigns","composite":false}],"updates":[{"name":"createCampaign"}],"callbacks":{}}}
+{"canister_methods":{"queries":[{"name":"greet","composite":false},{"name":"getAllUsers","composite":false},{"name":"getUserByEmail","composite":false},{"name":"userLogin","composite":true},{"name":"getAllCampaigns","composite":false}],"updates":[{"name":"userRegistration"},{"name":"createCampaign"}],"callbacks":{}}}

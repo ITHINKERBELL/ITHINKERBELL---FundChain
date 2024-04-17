@@ -14,6 +14,9 @@ _export(exports, {
     },
     canisterMethods: function() {
         return canisterMethods;
+    },
+    users: function() {
+        return users;
     }
 });
 function _extends() {
@@ -100715,7 +100718,107 @@ var Principal4 = class _Principal {
         this._isPrincipal = true;
     }
 };
+// src/project_backend/src/util/checkValidation.ts
+var checkEveryInputForSignup = async (username, email, password, type, dateString)=>{
+    if (!checkUsernameValidity(username)) {
+        return {
+            "message": "Username must only contains letters and numbers.",
+            "httpCode": 400
+        };
+    }
+    if (!checkEmailValidity(email)) {
+        return {
+            "message": "Invalid email address.",
+            "httpCode": 400
+        };
+    }
+    if (!checkPasswordValidity(password)) {
+        return {
+            "message": "Password must have at least one lowercase letter, one uppercase letter, one numeric digit, and one special character.",
+            "httpCode": 400
+        };
+    }
+    if (!await checkUsernameAvailability(username)) {
+        return {
+            "message": "Username is being used.",
+            "httpCode": 400
+        };
+    }
+    if (!await checkEmailAvailability(email)) {
+        return {
+            "message": "Email address is being used.",
+            "httpCode": 400
+        };
+    }
+    if (!await checkUserTypeValidity(type)) {
+        return {
+            "message": "Invalid user type.",
+            "httpCode": 400
+        };
+    }
+    if (!await checkDateValidity(dateString)) {
+        return {
+            "message": "Invalid entered date.",
+            "httpCode": 400
+        };
+    }
+    return {
+        "message": "success",
+        "httpCode": 200
+    };
+};
+var checkUsernameValidity = (username)=>{
+    const regex = /^[a-zA-Z0-9]{1,20}$/;
+    return regex.test(username);
+};
+var checkEmailValidity = (emailAddress)=>{
+    const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/;
+    return regex.test(emailAddress);
+};
+var checkPasswordValidity = (password)=>{
+    const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s)./;
+    return regex.test(password);
+};
+var checkUsernameAvailability = async (username)=>{
+    const values = users.values();
+    for (const user of values){
+        if (user.username.toLowerCase() === username.toLowerCase()) {
+            return false;
+        }
+    }
+    return true;
+};
+var checkEmailAvailability = async (email)=>{
+    const values = users.values();
+    for (const user of values){
+        if (user.email.toLowerCase() === email.toLowerCase()) {
+            return false;
+        }
+    }
+    return true;
+};
+var checkUserTypeValidity = async (type)=>{
+    return type.toLowerCase() === "donor" || type.toLowerCase() === "user";
+};
+var checkDateValidity = async (dateString)=>{
+    var date = new Date(dateString);
+    return !isNaN(date.getTime());
+};
 // src/project_backend/src/index.ts
+var User = Record2({
+    id: Principal3,
+    email: text,
+    username: text,
+    password: text,
+    userType: text,
+    name: Record2({
+        firstName: text,
+        lastName: text,
+        middleName: text,
+        birthday: text
+    })
+});
+var users = StableBTreeMap(0);
 var Campaign = Record2({
     owner: text,
     title: text,
@@ -100734,6 +100837,80 @@ var src_default = Canister({
         text
     ], text, (name)=>{
         return `Hello, ${name}!`;
+    }),
+    userRegistration: update([
+        text,
+        text,
+        text,
+        text,
+        text,
+        text,
+        text,
+        text
+    ], text, async (email, username, password, userType, firstName, lastName, middleName, birthday)=>{
+        const checkerForInput = await checkEveryInputForSignup(username, email, password, userType, birthday);
+        if (checkerForInput.message === "success") {
+            const id2 = generateId();
+            const newUser = {
+                id: id2,
+                email,
+                username,
+                password,
+                userType,
+                name: {
+                    firstName,
+                    lastName,
+                    middleName,
+                    birthday
+                }
+            };
+            users.insert(newUser.id, newUser);
+        }
+        return checkerForInput.message;
+    }),
+    getAllUsers: query([], Vec2(User), ()=>{
+        return users.values();
+    }),
+    getUserByEmail: query([
+        text
+    ], text, (email)=>{
+        {
+            let foundUser = null;
+            let allUsers = users.values();
+            for (let user of allUsers){
+                {
+                    if (user.email.toLowerCase() === email.toLowerCase()) {
+                        {
+                            foundUser = user;
+                            break;
+                        }
+                    }
+                }
+            }
+            return JSON.stringify(foundUser);
+        }
+    }),
+    userLogin: query([
+        text,
+        text
+    ], text, async (email, password)=>{
+        if (!checkEmailValidity(email)) {
+            return "Invalid email address.";
+        }
+        let allUsers = users.values();
+        for (let user of allUsers){
+            {
+                if (user.email.toLowerCase() === email.toLowerCase()) {
+                    {
+                        if (password === user.password) {
+                            return "Successful login";
+                        }
+                        return "Incorrect email or password.";
+                    }
+                }
+            }
+        }
+        return "Incorrect email or password.";
     }),
     createCampaign: update([
         text,
@@ -100762,6 +100939,10 @@ var src_default = Canister({
         return campaigns.values();
     })
 });
+function generateId() {
+    const randomBytes = new Array(29).fill(0).map((_)=>Math.floor(Math.random() * 256));
+    return Principal3.fromUint8Array(Uint8Array.from(randomBytes));
+}
 // <stdin>
 globalThis.process = {
     env: {}

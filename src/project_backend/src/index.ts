@@ -1,5 +1,5 @@
 import { Canister, query, Record, text, Opt, Vec, int, StableBTreeMap, Principal, update, nat } from 'azle';
-import { checkEveryInputForSignup } from './util/checkValidation';
+import { checkEmailValidity, checkEveryInputForSignup } from './util/checkValidation';
 
 // Define the User record type
 const User = Record({
@@ -82,6 +82,22 @@ export default Canister({
         }}
         return JSON.stringify(foundUser);
     }}),
+    userLogin: query([text, text], text, async (email, password)=> {
+        if (!checkEmailValidity(email)) {
+            return 'Invalid email address.'
+        }
+        let allUsers = users.values();
+        for (let user of allUsers) {{
+            if (user.email.toLowerCase() === email.toLowerCase()) {{
+                // TODO: add bhash
+                if(password === user.password){
+                    return 'Successful login'
+                }
+                return 'Incorrect email or password.'
+            }}
+        }}
+        return 'Incorrect email or password.'
+    }),
     createCampaign: update([text, text, text, nat, nat, text], int, async (_owner: string, _title: string, _description: string, _target: nat, _deadline: nat, _image: string) => {
         // if (_deadline <= Date.now()) {
         //     throw new Error("The deadline should be a date in the future.");
