@@ -68,7 +68,9 @@ export default Canister({
         }
         return checkerForInput.message
     }),
-
+    getAllUsers: query([], Vec(User), () => {
+        return users.values()
+    }),
     createCampaign: update([text, text, text, nat, nat, text], int, async (_owner: string, _title: string, _description: string, _target: nat, _deadline: nat, _image: string) => {
         // if (_deadline <= Date.now()) {
         //     throw new Error("The deadline should be a date in the future.");
