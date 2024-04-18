@@ -1,8 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import CreateCampaign from './pages/CreateCampaign';
-import Navbar from './components/Navbar';
-import Sidebar from './components/Sidebar';
-import Home from './pages/home';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import CreateCampaign from "./pages/CreateCampaign";
+import Navbar from "./components/Navbar";
+import Sidebar from "./components/Sidebar";
+import Home from "./pages/home";
+import CampaignDetails from "./pages/CampaignDetails";
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
             <Route path="/" element={<Home />} />
             {/* <Route path="/profile" element={<Profile />} /> */}
             <Route path="/create-campaign" element={<CreateCampaign />} />
-            {/* <Route path="/campaign-details/:id" element={<CampaignDetails />} /> */}
+            <Route path="/campaign-details/:id" element={<CampaignDetails />} />
           </Routes>
         </div>
       </div>
