@@ -33,7 +33,7 @@ function _extends() {
     };
     return _extends.apply(this, arguments);
 }
-var _class, _class1, _class2, _class3, _class4, _class5, _class6, _class7;
+var _class, _class1, _class2, _class3, _class4, _class5, _class6, _class7, _class8;
 var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -98907,6 +98907,25 @@ function Some(value) {
 var None = {
     None: null
 };
+function Opt2(t) {
+    return new AzleOpt(t);
+}
+var AzleOpt = (_class1 = class {
+    toBytes(data) {
+        return encode3(this, data);
+    }
+    fromBytes(bytes2) {
+        return decode3(this, bytes2);
+    }
+    getIdl(parents) {
+        return idl_exports.Opt(toIdl(this.innerType, parents));
+    }
+    constructor(t){
+        this.tsType = {};
+        this._azleKind = "AzleOpt";
+        this.innerType = t;
+    }
+}, _class1._azleKind = "AzleOpt", _class1);
 // node_modules/azle/src/lib/candid/types/constructed/record.ts
 function Record2(obj) {
     return _extends({}, obj, {
@@ -98923,7 +98942,7 @@ function Record2(obj) {
     });
 }
 // node_modules/azle/src/lib/candid/types/constructed/vec.ts
-var AzleVec = (_class1 = class {
+var AzleVec = (_class2 = class {
     toBytes(data) {
         return encode3(this, data);
     }
@@ -98938,12 +98957,12 @@ var AzleVec = (_class1 = class {
         this._azleKind = "AzleVec";
         this.innerType = t;
     }
-}, _class1._azleKind = "AzleVec", _class1);
+}, _class2._azleKind = "AzleVec", _class2);
 function Vec2(t) {
     return new AzleVec(t);
 }
 // node_modules/azle/src/lib/candid/types/primitive/ints/int.ts
-var AzleInt = (_class2 = class {
+var AzleInt = (_class3 = class {
     static toBytes(data) {
         return encode3(this, data);
     }
@@ -98956,10 +98975,10 @@ var AzleInt = (_class2 = class {
     constructor(){
         this._azleKind = "AzleInt";
     }
-}, _class2._azleKind = "AzleInt", _class2);
+}, _class3._azleKind = "AzleInt", _class3);
 var int = AzleInt;
 // node_modules/azle/src/lib/candid/types/primitive/nats/nat.ts
-var AzleNat = (_class3 = class {
+var AzleNat = (_class4 = class {
     static toBytes(data) {
         return encode3(this, data);
     }
@@ -98972,10 +98991,10 @@ var AzleNat = (_class3 = class {
     constructor(){
         this._azleKind = "AzleNat";
     }
-}, _class3._azleKind = "AzleNat", _class3);
+}, _class4._azleKind = "AzleNat", _class4);
 var nat = AzleNat;
 // node_modules/azle/src/lib/candid/types/primitive/null.ts
-var AzleNull = (_class4 = class {
+var AzleNull = (_class5 = class {
     static toBytes(data) {
         return encode3(this, data);
     }
@@ -98988,10 +99007,10 @@ var AzleNull = (_class4 = class {
     constructor(){
         this._azleKind = "AzleNull";
     }
-}, _class4._azleKind = "AzleNull", _class4);
+}, _class5._azleKind = "AzleNull", _class5);
 var Null2 = AzleNull;
 // node_modules/azle/src/lib/candid/types/primitive/text.ts
-var AzleText = (_class5 = class {
+var AzleText = (_class6 = class {
     static toBytes(data) {
         return encode3(this, data);
     }
@@ -99004,7 +99023,7 @@ var AzleText = (_class5 = class {
     constructor(){
         this._azleKind = "AzleText";
     }
-}, _class5._azleKind = "AzleText", _class5);
+}, _class6._azleKind = "AzleText", _class6);
 var text = AzleText;
 // node_modules/azle/src/lib/candid/types/reference/service/canister_function/query_update.ts
 function createQueryMethods(canisterOptions) {
@@ -99160,7 +99179,7 @@ function Canister(canisterOptions) {
     return result;
 }
 // node_modules/azle/src/lib/candid/types/reference/principal.ts
-var Principal3 = (_class6 = class extends Principal {
+var Principal3 = (_class7 = class extends Principal {
     static toBytes(data) {
         return encode3(this, data);
     }
@@ -99170,7 +99189,7 @@ var Principal3 = (_class6 = class extends Principal {
     static getIdl(_parents) {
         return idl_exports.Principal;
     }
-}, _class6._azleKind = "Principal", _class6);
+}, _class7._azleKind = "Principal", _class7);
 // node_modules/azle/src/lib/candid/serde/decode.ts
 function decode3(candidType, data) {
     if (Array.isArray(candidType)) {
@@ -99388,7 +99407,7 @@ function encodeMultiple(candidTypes, data) {
     return new Uint8Array(idl_exports.encode(idls, values));
 }
 // node_modules/azle/src/lib/candid/types/primitive/nats/nat64.ts
-var AzleNat64 = (_class7 = class {
+var AzleNat64 = (_class8 = class {
     static toBytes(data) {
         return encode3(this, data);
     }
@@ -99401,7 +99420,7 @@ var AzleNat64 = (_class7 = class {
     constructor(){
         this._azleKind = "AzleNat64";
     }
-}, _class7._azleKind = "AzleNat64", _class7);
+}, _class8._azleKind = "AzleNat64", _class8);
 var nat64 = AzleNat64;
 // node_modules/azle/src/lib/ic/call_raw.ts
 function callRaw(canisterId, method2, argsRaw, payment) {
@@ -100819,9 +100838,12 @@ var User = Record2({
     })
 });
 var users = StableBTreeMap(0);
-var Campaign = Record2({
-    owner: text,
+var CampaignId = text;
+var CampaignTitle = text;
+var Campaign_ = Record2({
+    // campaignId : text,
     title: text,
+    owner: text,
     description: text,
     target: nat,
     deadline: nat,
@@ -100912,17 +100934,22 @@ var src_default = Canister({
         }
         return "Incorrect email or password.";
     }),
-    createCampaign: update([
+    createACampaign: update([
         text,
         text,
         text,
         nat,
         nat,
         text
-    ], int, async (_owner, _title, _description, _target, _deadline, _image)=>{
+    ], Campaign_, async (_owner, _title, _description, _target, _deadline, _image)=>{
+        if (_deadline <= Date.now()) {
+            throw new Error("The deadline should be a date in the future.");
+        }
+        let campaignId = v4_default();
         const newCampaign = {
-            owner: _owner,
+            // campaignId: campaignId,
             title: _title,
+            owner: _owner,
             description: _description,
             target: _target,
             deadline: _deadline,
@@ -100931,12 +100958,22 @@ var src_default = Canister({
             donators: [],
             donations: []
         };
-        campaigns.insert(_owner, newCampaign);
+        campaigns.insert(newCampaign.title, newCampaign);
         campaignCount++;
-        return BigInt(campaignCount);
+        return newCampaign;
     }),
-    getAllCampaigns: query([], Vec2(Campaign), ()=>{
+    getAllCampaigns: query([], Vec2(Campaign_), ()=>{
         return campaigns.values();
+    }),
+    getCampaignById: query([
+        CampaignId
+    ], Opt2(Campaign_), (_campaignId)=>{
+        return campaigns.get(_campaignId);
+    }),
+    getCampaignByTitle: query([
+        CampaignTitle
+    ], Opt2(Campaign_), (_campaignTitle)=>{
+        return campaigns.get(_campaignTitle);
     })
 });
 function generateId() {

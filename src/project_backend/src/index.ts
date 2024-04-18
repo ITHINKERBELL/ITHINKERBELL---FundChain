@@ -1,5 +1,6 @@
 import { Canister, query, Record, text, Opt, Vec, int, StableBTreeMap, Principal, update, nat } from 'azle';
 import { checkEmailValidity, checkEveryInputForSignup } from './util/checkValidation';
+import { v4 as uuid } from 'uuid';
 
 // Define the User record type
 const User = Record({
@@ -20,11 +21,13 @@ type User = typeof User.tsType;
 export let users = StableBTreeMap<Principal, User>(0)
 
 const CampaignId = text;
+const CampaignTitle = text;
 
 // Define the Campaign record type
-const Campaign = Record({
-    owner: text,
+const Campaign_ = Record({
+    // campaignId : text,
     title: text,
+    owner: text,
     description: text,
     target: nat,
     deadline: nat,
@@ -35,16 +38,21 @@ const Campaign = Record({
 });
 
 type CampaignId = typeof CampaignId.tsType;
-type Campaign = typeof Campaign.tsType;
+type CampaignTitle = typeof CampaignTitle.tsType;
+type Campaign_ = typeof Campaign_.tsType;
 
 
-let campaigns = StableBTreeMap<CampaignId, Campaign>(0);   
+// let campaigns = StableBTreeMap<CampaignId, Campaign_>(0);   
+
+let campaigns = StableBTreeMap<CampaignTitle, Campaign_>(0);   
 let campaignCount = 0;
 
 export default Canister({
+
     greet: query([text], text, (name) => {
         return `Hello, ${name}!`;
     }),
+
     userRegistration: update([text, text, text, text, text, text, text, text], text, async (email, username, password, userType, firstName, lastName, middleName, birthday) => {
         // Checks whether the user's entered username, email, and password are valid and available
         const checkerForInput = await checkEveryInputForSignup(username, email, password, userType, birthday);
@@ -68,9 +76,11 @@ export default Canister({
         }
         return checkerForInput.message
     }),
+
     getAllUsers: query([], Vec(User), () => {
         return users.values()
     }), 
+
     getUserByEmail: query([text], text, (email) => {{
         let foundUser = null;
         let allUsers = users.values();
@@ -82,6 +92,7 @@ export default Canister({
         }}
         return JSON.stringify(foundUser);
     }}),
+
     userLogin: query([text, text], text, async (email, password)=> {
         if (!checkEmailValidity(email)) {
             return 'Invalid email address.'
@@ -98,14 +109,18 @@ export default Canister({
         }}
         return 'Incorrect email or password.'
     }),
-    createCampaign: update([text, text, text, nat, nat, text], int, async (_owner: string, _title: string, _description: string, _target: nat, _deadline: nat, _image: string) => {
-        // if (_deadline <= Date.now()) {
-        //     throw new Error("The deadline should be a date in the future.");
-        // }
 
-        const newCampaign : Campaign = {
+    createACampaign: update([text, text, text, nat, nat, text], Campaign_, async (_owner: string, _title: string, _description: string, _target: nat, _deadline: nat, _image: string) => {
+        if (_deadline <= Date.now()) {
+            throw new Error("The deadline should be a date in the future.");
+        }
+
+        let campaignId = uuid();
+
+        const newCampaign : Campaign_ = {
+            // campaignId: campaignId,
+            title: _title,    
             owner: _owner,
-            title: _title,
             description: _description,
             target: _target,
             deadline: _deadline,
@@ -115,18 +130,26 @@ export default Canister({
             donations: []
         };
 
-        campaigns.insert(_owner, newCampaign);
+        campaigns.insert(newCampaign.title, newCampaign);
 
         campaignCount++;
-        return BigInt(campaignCount);
+        return newCampaign;
     }),
 
-    getAllCampaigns: query([], Vec(Campaign), () => {
+    getAllCampaigns: query([], Vec(Campaign_), () => {
         return campaigns.values();
-    })
+    }),
+
+    getCampaignById: query([CampaignId], Opt(Campaign_), (_campaignId: CampaignId) => {
+        return campaigns.get(_campaignId);
+    }),
+
+    getCampaignByTitle: query([CampaignTitle], Opt(Campaign_), (_campaignTitle: CampaignTitle) => {
+        return campaigns.get(_campaignTitle);
+    }),
 
 })
- 
+
 function generateId(): Principal {
     const randomBytes = new Array(29)
         .fill(0)

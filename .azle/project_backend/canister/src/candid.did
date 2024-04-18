@@ -1,7 +1,9 @@
 service: () -> {
-    createCampaign: (text, text, text, nat, nat, text) -> (int);
+    createACampaign: (text, text, text, nat, nat, text) -> (record {title:text; owner:text; amountCollected:nat; description:text; deadline:nat; donators:vec text; target:nat; image:text; donations:vec int});
     getAllCampaigns: () -> (vec record {title:text; owner:text; amountCollected:nat; description:text; deadline:nat; donators:vec text; target:nat; image:text; donations:vec int}) query;
     getAllUsers: () -> (vec record {id:principal; userType:text; username:text; password:text; name:record {middleName:text; birthday:text; lastName:text; firstName:text}; email:text}) query;
+    getCampaignById: (text) -> (opt record {title:text; owner:text; amountCollected:nat; description:text; deadline:nat; donators:vec text; target:nat; image:text; donations:vec int}) query;
+    getCampaignByTitle: (text) -> (opt record {title:text; owner:text; amountCollected:nat; description:text; deadline:nat; donators:vec text; target:nat; image:text; donations:vec int}) query;
     getUserByEmail: (text) -> (text) query;
     greet: (text) -> (text) query;
     userLogin: (text, text) -> (text) query;

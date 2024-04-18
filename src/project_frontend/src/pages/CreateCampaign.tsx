@@ -1,6 +1,5 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 // import { useNavigate } from 'react-router-dom';
-// import { ethers } from 'ethers';
 
 // import useStateContext from '../context';
 import money from '../assets/money.svg';
@@ -8,8 +7,6 @@ import CustomButton from '../components/CustomButton';
 import FormField from '../components/FormField';
 import Loader from '../components/Loader';
 // import checkIfImage from '../utils/checkIfImage';
-
-// Your code using checkIfImage function
 
 const CreateCampaign: React.FC = () => {
   // const navigate = useNavigate();
@@ -24,12 +21,29 @@ const CreateCampaign: React.FC = () => {
     image: ''
   });
 
+  const [currentDate, setCurrentDate] = useState<number>(Date.now());
+
+  useEffect(() => {
+    setCurrentDate(Date.now());
+  }, [form.deadline]);
+
   const handleFormFieldChange = (fieldName: string, e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [fieldName]: e.target.value })
   }  
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const deadlineTimestamp = Date.parse(form.deadline);
+    if (isNaN(deadlineTimestamp)) {
+      console.error('Invalid deadline format');
+      return;
+    }
+
+    if (deadlineTimestamp <= Date.now()) {
+      console.error('The deadline should be a date in the future.');
+      return;
+    }
 
     console.log("success");
 
