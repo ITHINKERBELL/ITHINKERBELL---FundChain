@@ -1,6 +1,7 @@
 import React, { ChangeEvent } from 'react';
 
 interface FormFieldProps {
+  id: string;
   labelName?: string;
   placeholder: string;
   inputType: string;
@@ -9,7 +10,7 @@ interface FormFieldProps {
   handleChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
 
-const FormField: React.FC<FormFieldProps> = ({ labelName, placeholder, inputType, isTextArea, value, handleChange }) => {
+const FormField: React.FC<FormFieldProps> = ({ id, labelName, placeholder, inputType, isTextArea, value, handleChange }) => {
   return (
     <label className="flex-1 w-full flex flex-col">
       {labelName && (
@@ -18,6 +19,7 @@ const FormField: React.FC<FormFieldProps> = ({ labelName, placeholder, inputType
       {isTextArea ? (
         <textarea 
           required
+          id={id}
           value={value}
           onChange={handleChange}
           rows={10}
@@ -27,6 +29,7 @@ const FormField: React.FC<FormFieldProps> = ({ labelName, placeholder, inputType
       ) : (
         <input 
           required
+          id={id}
           value={value}
           onChange={handleChange}
           type={inputType}

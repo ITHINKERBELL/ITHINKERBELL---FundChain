@@ -1,49 +1,71 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
-// import { useNavigate } from 'react-router-dom';
 
-// import useStateContext from '../context';
 import money from '../assets/money.svg';
 import CustomButton from '../components/CustomButton';
 import FormField from '../components/FormField';
 import Loader from '../components/Loader';
-// import checkIfImage from '../utils/checkIfImage';
+
+import { project_backend } from '../../../declarations/project_backend';
 
 const CreateCampaign: React.FC = () => {
-  // const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  // const { createCampaign } = useStateContext();
   const [form, setForm] = useState({
-    name: '',
-    title: '',
-    description: '',      
+    businessOwner: '',
+    businessName: '',
+    description: '',
     target: '', 
     deadline: '',
     image: ''
   });
 
+  const [res, setRes] = useState<any>(null);
   const [currentDate, setCurrentDate] = useState<number>(Date.now());
 
-  useEffect(() => {
-    setCurrentDate(Date.now());
-  }, [form.deadline]);
+  // // thsi will get the current date
+  // useEffect(() => {
+  //   setCurrentDate(Date.now());
+  // }, [form.deadline]);
 
   const handleFormFieldChange = (fieldName: string, e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [fieldName]: e.target.value })
   }  
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
-    const deadlineTimestamp = Date.parse(form.deadline);
-    if (isNaN(deadlineTimestamp)) {
-      console.error('Invalid deadline format');
-      return;
-    }
+    const form = event.currentTarget;
 
+    const businessOwnerInput = form.elements.namedItem("businessOwner") as HTMLInputElement;
+    const businessNameInput = form.elements.namedItem("businessName") as HTMLInputElement;
+    const descriptionInput = form.elements.namedItem("story") as HTMLInputElement;
+    const targetInput = form.elements.namedItem("target") as HTMLInputElement;
+    const deadlineInput = form.elements.namedItem("deadline") as HTMLInputElement;
+    const imageInput = form.elements.namedItem("image") as HTMLInputElement;
+
+    const businessOwnerValue = businessOwnerInput.value;
+    const businessNameValue = businessNameInput.value;
+    const descriptionValue = descriptionInput.value;
+    const targetValue = targetInput.value;
+    const deadlineValue = deadlineInput.value;
+    const imageValue = imageInput.value;
+
+    const deadlineTimestamp = Date.parse(deadlineValue);
+
+
+    // TODO: add more validations
     if (deadlineTimestamp <= Date.now()) {
       console.error('The deadline should be a date in the future.');
       return;
     }
+
+    project_backend.createACampaign(businessOwnerValue, businessNameValue, descriptionValue, targetValue, deadlineValue, imageValue)
+    .then((res) => {
+      console.log(res); 
+      setRes(res); 
+    })
+    .catch((error) => {
+      console.error(error); 
+    });
 
     console.log("success");
 
@@ -58,6 +80,8 @@ const CreateCampaign: React.FC = () => {
     //     setForm({ ...form, image: '' });
     //   }
     // })
+
+    // project_backend.createACampaign
   }
 
   return (
@@ -70,22 +94,25 @@ const CreateCampaign: React.FC = () => {
       <form onSubmit={handleSubmit} className="w-full mt-[65px] flex flex-col gap-[30px]">
         <div className="flex flex-wrap gap-[40px]">
           <FormField 
+            id='businessOwner'
             labelName="Your Name *"
             placeholder="Juan Marie Delos Santos"
             inputType="text"
-            value={form.name}
-            handleChange={(e) => handleFormFieldChange('name', e)}
+            value={form.businessOwner}
+            handleChange={(e) => handleFormFieldChange('businessOwner', e)}
           />
           <FormField 
+            id='businessName'
             labelName="Business Name *"
             placeholder="Write your business name"
             inputType="text"
-            value={form.title}
-            handleChange={(e) => handleFormFieldChange('title', e)}
+            value={form.businessName}
+            handleChange={(e) => handleFormFieldChange('businessName', e)}
           />
         </div>
 
         <FormField 
+            id='image'
             labelName="Campaign image *"
             placeholder="Place image URL of your campaign"
             inputType="url"
@@ -94,6 +121,7 @@ const CreateCampaign: React.FC = () => {
           />
 
         <FormField 
+            id='story'
             labelName="Story *"
             placeholder="Write your story"
             isTextArea
@@ -104,6 +132,7 @@ const CreateCampaign: React.FC = () => {
 
         <div className="flex flex-wrap gap-[40px]">
           <FormField 
+            id='target'
             labelName="Goal *"
             placeholder="ETH 2.50"
             inputType="text"
@@ -111,6 +140,7 @@ const CreateCampaign: React.FC = () => {
             handleChange={(e) => handleFormFieldChange('target', e)}
           />
           <FormField 
+            id="deadline"
             labelName="End Date *"
             placeholder="End Date"
             inputType="date"
