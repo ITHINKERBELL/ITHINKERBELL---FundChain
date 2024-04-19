@@ -20,32 +20,26 @@ const User = Record({
 type User = typeof User.tsType;
 export let users = StableBTreeMap<Principal, User>(0)
 
-const CampaignId = text;
-const CampaignTitle = text;
-
-// Define the Campaign record type
-const Campaign_ = Record({
-    // campaignId : text,
+const Campaigns = Record({
+    campaignId : text,
     title: text,
     owner: text,
     description: text,
-    target: nat,
-    deadline: nat,
+    target: text,
+    deadline: text,
     amountCollected: nat,
     image: text,
     donators: Vec(text),
     donations: Vec(int)
 });
 
+const CampaignId = text;
 type CampaignId = typeof CampaignId.tsType;
-type CampaignTitle = typeof CampaignTitle.tsType;
-type Campaign_ = typeof Campaign_.tsType;
+type Campaigns = typeof Campaigns.tsType;
 
+// new map testing
+let campaigns = StableBTreeMap<CampaignId, Campaigns>(3);   
 
-// let campaigns = StableBTreeMap<CampaignId, Campaign_>(0);   
-
-let campaigns = StableBTreeMap<CampaignTitle, Campaign_>(0);   
-let campaignCount = 0;
 
 export default Canister({
 
@@ -110,15 +104,20 @@ export default Canister({
         return 'Incorrect email or password.'
     }),
 
-    createACampaign: update([text, text, text, nat, nat, text], Campaign_, async (_owner: string, _title: string, _description: string, _target: nat, _deadline: nat, _image: string) => {
-        if (_deadline <= Date.now()) {
+    createACampaign: update([text, text, text, text, text, text], Campaigns, async (_owner: string, _title: string, _description: string, _target: text, _deadline: text, _image: string) => {
+        const deadlineTimestamp = Date.parse(_deadline);
+        if (isNaN(deadlineTimestamp)) {
+            throw new Error("Invalid deadline format");
+        }
+    
+        if (deadlineTimestamp <= Date.now()) {
             throw new Error("The deadline should be a date in the future.");
         }
 
         let campaignId = uuid();
 
-        const newCampaign : Campaign_ = {
-            // campaignId: campaignId,
+        const newCampaign : Campaigns = {
+            campaignId: campaignId,
             title: _title,    
             owner: _owner,
             description: _description,
@@ -130,23 +129,29 @@ export default Canister({
             donations: []
         };
 
-        campaigns.insert(newCampaign.title, newCampaign);
+        campaigns.insert(newCampaign.campaignId, newCampaign);
 
-        campaignCount++;
         return newCampaign;
     }),
 
-    getAllCampaigns: query([], Vec(Campaign_), () => {
+    // debugging 
+    getCampaignsLength: update([], text, () => {
+        const numCampaigns = campaigns.len();
+
+        return `${numCampaigns} number of campaigns`;
+    }), 
+
+    getAllCampaigns: query([], Vec(Campaigns), () => {
         return campaigns.values();
     }),
 
-    getCampaignById: query([CampaignId], Opt(Campaign_), (_campaignId: CampaignId) => {
+    getCampaignById: query([CampaignId], Opt(Campaigns), (_campaignId: CampaignId) => {
         return campaigns.get(_campaignId);
     }),
 
-    getCampaignByTitle: query([CampaignTitle], Opt(Campaign_), (_campaignTitle: CampaignTitle) => {
-        return campaigns.get(_campaignTitle);
-    }),
+    // getCampaignByTitle: query([CampaignTitle], Opt(Campaigns), (_campaignTitle: CampaignTitle) => {
+    //     return campaigns.get(_campaignTitle);
+    // }),
 
 })
 

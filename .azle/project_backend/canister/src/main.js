@@ -100840,20 +100840,32 @@ var User = Record2({
 var users = StableBTreeMap(0);
 var CampaignId = text;
 var CampaignTitle = text;
-var Campaign_ = Record2({
+var CampaignRecord = Record2({
     // campaignId : text,
     title: text,
     owner: text,
     description: text,
-    target: nat,
-    deadline: nat,
+    target: text,
+    deadline: text,
     amountCollected: nat,
     image: text,
     donators: Vec2(text),
     donations: Vec2(int)
 });
-var campaigns = StableBTreeMap(0);
-var campaignCount = 0;
+var Campaigns = Record2({
+    campaignId: text,
+    title: text,
+    owner: text,
+    description: text,
+    target: text,
+    deadline: text,
+    amountCollected: nat,
+    image: text,
+    donators: Vec2(text),
+    donations: Vec2(int)
+});
+var campaignRecords = StableBTreeMap(1);
+var campaigns = StableBTreeMap(3);
 var src_default = Canister({
     greet: query([
         text
@@ -100938,16 +100950,20 @@ var src_default = Canister({
         text,
         text,
         text,
-        nat,
-        nat,
+        text,
+        text,
         text
-    ], Campaign_, async (_owner, _title, _description, _target, _deadline, _image)=>{
-        if (_deadline <= Date.now()) {
+    ], Campaigns, async (_owner, _title, _description, _target, _deadline, _image)=>{
+        const deadlineTimestamp = Date.parse(_deadline);
+        if (isNaN(deadlineTimestamp)) {
+            throw new Error("Invalid deadline format");
+        }
+        if (deadlineTimestamp <= Date.now()) {
             throw new Error("The deadline should be a date in the future.");
         }
         let campaignId = v4_default();
         const newCampaign = {
-            // campaignId: campaignId,
+            campaignId,
             title: _title,
             owner: _owner,
             description: _description,
@@ -100958,21 +100974,24 @@ var src_default = Canister({
             donators: [],
             donations: []
         };
-        campaigns.insert(newCampaign.title, newCampaign);
-        campaignCount++;
+        campaigns.insert(newCampaign.campaignId, newCampaign);
         return newCampaign;
     }),
-    getAllCampaigns: query([], Vec2(Campaign_), ()=>{
+    getCampaignsLength: update([], text, ()=>{
+        const numCampaigns = campaigns.len();
+        return `${numCampaigns} number of campaigns`;
+    }),
+    getAllCampaigns: query([], Vec2(Campaigns), ()=>{
         return campaigns.values();
     }),
     getCampaignById: query([
         CampaignId
-    ], Opt2(Campaign_), (_campaignId)=>{
+    ], Opt2(Campaigns), (_campaignId)=>{
         return campaigns.get(_campaignId);
     }),
     getCampaignByTitle: query([
         CampaignTitle
-    ], Opt2(Campaign_), (_campaignTitle)=>{
+    ], Opt2(Campaigns), (_campaignTitle)=>{
         return campaigns.get(_campaignTitle);
     })
 });
