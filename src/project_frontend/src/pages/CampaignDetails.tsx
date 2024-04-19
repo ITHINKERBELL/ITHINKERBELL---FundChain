@@ -5,6 +5,8 @@ import CustomButton from "../components/CustomButton";
 import Loader from "../components/Loader";
 import { useStateContext } from "../context";
 import { profile } from "../assets";
+import { daysLeft } from "../utils";
+import { calculateBarPercentage } from "../utils";
 
 const CampaignDetails: React.FC = () => {
   const { state } = useLocation();
@@ -16,14 +18,6 @@ const CampaignDetails: React.FC = () => {
   const [donators, setDonators] = useState<
     { donator: string; donation: number }[]
   >([]);
-
-  const daysLeft = (deadline: Date): number => {
-    const today = new Date();
-    const diffTime = deadline.getTime() - today.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays;
-  };
-
   const remainingDays = daysLeft(new Date(state.deadline));
 
   const fetchDonators = async () => {
@@ -43,13 +37,6 @@ const CampaignDetails: React.FC = () => {
 
     navigate("/");
     setIsLoading(false);
-  };
-
-  const calculateBarPercentage = (
-    target: number,
-    amountCollected: number
-  ): number => {
-    return (amountCollected / target) * 100;
   };
 
   return (
