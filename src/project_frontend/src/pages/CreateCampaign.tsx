@@ -1,6 +1,8 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-import money from '../assets/money.svg';
 import CustomButton from '../components/CustomButton';
 import FormField from '../components/FormField';
 import Loader from '../components/Loader';
@@ -18,6 +20,7 @@ const CreateCampaign: React.FC = () => {
     image: ''
   });
 
+  const navigate = useNavigate();
   const [res, setRes] = useState<any>(null);
   const [currentDate, setCurrentDate] = useState<number>(Date.now());
 
@@ -62,26 +65,24 @@ const CreateCampaign: React.FC = () => {
     .then((res) => {
       console.log(res); 
       setRes(res); 
+      navigate('/');
     })
     .catch((error) => {
       console.error(error); 
     });
 
+    toast.success('You have successfully created a campaign!', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light"
+    });
+
     console.log("success");
-
-    // checkIfImage(form.image, async (exists: boolean) => {
-    //   if (exists) {
-    //     setIsLoading(true);
-    //     // await createCampaign({ ...form, target: ethers.utils.parseUnits(form.target, 18) });
-    //     // setIsLoading(false);
-    //     navigate('/');
-    //   } else {
-    //     alert('Provide valid image URL');
-    //     setForm({ ...form, image: '' });
-    //   }
-    // })
-
-    // project_backend.createACampaign
   }
 
   return (

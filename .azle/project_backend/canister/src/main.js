@@ -100838,20 +100838,6 @@ var User = Record2({
     })
 });
 var users = StableBTreeMap(0);
-var CampaignId = text;
-var CampaignTitle = text;
-var CampaignRecord = Record2({
-    // campaignId : text,
-    title: text,
-    owner: text,
-    description: text,
-    target: text,
-    deadline: text,
-    amountCollected: nat,
-    image: text,
-    donators: Vec2(text),
-    donations: Vec2(int)
-});
 var Campaigns = Record2({
     campaignId: text,
     title: text,
@@ -100864,7 +100850,7 @@ var Campaigns = Record2({
     donators: Vec2(text),
     donations: Vec2(int)
 });
-var campaignRecords = StableBTreeMap(1);
+var CampaignId = text;
 var campaigns = StableBTreeMap(3);
 var src_default = Canister({
     greet: query([
@@ -100977,6 +100963,7 @@ var src_default = Canister({
         campaigns.insert(newCampaign.campaignId, newCampaign);
         return newCampaign;
     }),
+    // debugging 
     getCampaignsLength: update([], text, ()=>{
         const numCampaigns = campaigns.len();
         return `${numCampaigns} number of campaigns`;
@@ -100988,11 +100975,6 @@ var src_default = Canister({
         CampaignId
     ], Opt2(Campaigns), (_campaignId)=>{
         return campaigns.get(_campaignId);
-    }),
-    getCampaignByTitle: query([
-        CampaignTitle
-    ], Opt2(Campaigns), (_campaignTitle)=>{
-        return campaigns.get(_campaignTitle);
     })
 });
 function generateId() {

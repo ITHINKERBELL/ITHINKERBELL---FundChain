@@ -3,7 +3,6 @@ service: () -> {
     getAllCampaigns: () -> (vec record {title:text; owner:text; amountCollected:nat; campaignId:text; description:text; deadline:text; donators:vec text; target:text; image:text; donations:vec int}) query;
     getAllUsers: () -> (vec record {id:principal; userType:text; username:text; password:text; name:record {middleName:text; birthday:text; lastName:text; firstName:text}; email:text}) query;
     getCampaignById: (text) -> (opt record {title:text; owner:text; amountCollected:nat; campaignId:text; description:text; deadline:text; donators:vec text; target:text; image:text; donations:vec int}) query;
-    getCampaignByTitle: (text) -> (opt record {title:text; owner:text; amountCollected:nat; campaignId:text; description:text; deadline:text; donators:vec text; target:text; image:text; donations:vec int}) query;
     getCampaignsLength: () -> (text);
     getUserByEmail: (text) -> (text) query;
     greet: (text) -> (text) query;
