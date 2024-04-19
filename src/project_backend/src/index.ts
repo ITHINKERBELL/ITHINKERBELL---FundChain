@@ -2,8 +2,8 @@ import { Canister, query, Record, text, Opt, Vec, int, StableBTreeMap, Principal
 import { checkEmailValidity, checkEveryInputForSignup } from './util/checkValidation';
 import { v4 as uuid } from 'uuid';
 import { getUserByEmail } from './util/getUserByEmail';
-import { hash } from './util/hash';
-import { validate } from './util/authentication';
+import { compareHash, hash } from './util/hash';
+import { encrypt, validate } from './util/authentication';
 
 // Define the User record type
 const User = Record({
@@ -50,7 +50,6 @@ export default Canister({
     greet: query([text], text, (name) => {
         return `Hello, ${name}!`;
     }),
-
     userRegistration: update([text, text, text, text, text, text, text, text], text, async (email, username, password, userType, firstName, lastName, middleName, birthday) => {
         // Checks whether the user's entered username, email, and password are valid and available
         const checkerForInput = await checkEveryInputForSignup(username, email, password, userType, birthday);
@@ -61,7 +60,7 @@ export default Canister({
                 id,
                 email,
                 username,
-                password,
+                password: hash(password, `${id}`),
                 userType,
                 name: {
                     firstName,
@@ -75,7 +74,6 @@ export default Canister({
         }
         return checkerForInput.message
     }),
-
     getAllUsers: query([], Vec(User), () => {
         return users.values()
     }),
@@ -96,7 +94,7 @@ export default Canister({
             return JSON.stringify(foundUser);
         }
     }),
-    userLogin: query([text, text], text, async (email, password) => {
+    userLogin: update([text, text], text, async (email, password) => {
         if (!checkEmailValidity(email)) {
             return 'Invalid email address.'
         }
@@ -105,11 +103,10 @@ export default Canister({
             {
                 if (user.email.toLowerCase() === email.toLowerCase()) {
                     {
-                        // TODO: add bhash
-                        if (password === user.password) {
-                            return 'Successful login'
+                        if (compareHash(password, user.password, `${user.id}`)) {
+                            return await encrypt(user)
                         }
-                        return 'Incorrect email or password.'
+                        return `Incorrect email or password.`
                     }
                 }
             }
