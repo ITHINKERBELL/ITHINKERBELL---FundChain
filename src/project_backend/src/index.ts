@@ -1,6 +1,9 @@
 import { Canister, query, Record, text, Opt, Vec, int, StableBTreeMap, Principal, update, nat } from 'azle';
 import { checkEmailValidity, checkEveryInputForSignup } from './util/checkValidation';
 import { v4 as uuid } from 'uuid';
+import { getUserByEmail } from './util/getUserByEmail';
+import { hash } from './util/hash';
+import { validate } from './util/authentication';
 
 // Define the User record type
 const User = Record({
@@ -14,14 +17,15 @@ const User = Record({
         lastName: text,
         middleName: text,
         birthday: text
-    })
+    }),
+    latestLoginDate: text
 })
 
-type User = typeof User.tsType;
+export type User = typeof User.tsType;
 export let users = StableBTreeMap<Principal, User>(0)
 
 const Campaigns = Record({
-    campaignId : text,
+    campaignId: text,
     title: text,
     owner: text,
     description: text,
@@ -38,7 +42,7 @@ type CampaignId = typeof CampaignId.tsType;
 type Campaigns = typeof Campaigns.tsType;
 
 // new map testing
-let campaigns = StableBTreeMap<CampaignId, Campaigns>(3);   
+let campaigns = StableBTreeMap<CampaignId, Campaigns>(3);
 
 
 export default Canister({
@@ -50,7 +54,7 @@ export default Canister({
     userRegistration: update([text, text, text, text, text, text, text, text], text, async (email, username, password, userType, firstName, lastName, middleName, birthday) => {
         // Checks whether the user's entered username, email, and password are valid and available
         const checkerForInput = await checkEveryInputForSignup(username, email, password, userType, birthday);
-        if(checkerForInput.message === "success"){
+        if (checkerForInput.message === "success") {
             const id = generateId();
             // Bcrypt is used to encrypt the entered password
             const newUser: User = {
@@ -64,7 +68,8 @@ export default Canister({
                     lastName,
                     middleName,
                     birthday
-                }
+                },
+                latestLoginDate: JSON.stringify(new Date())
             };
             users.insert(newUser.id, newUser)
         }
@@ -73,52 +78,66 @@ export default Canister({
 
     getAllUsers: query([], Vec(User), () => {
         return users.values()
-    }), 
-
-    getUserByEmail: query([text], text, (email) => {{
-        let foundUser = null;
-        let allUsers = users.values();
-        for (let user of allUsers) {{
-            if (user.email.toLowerCase() === email.toLowerCase()) {{
-                foundUser = user;
-                break;
-            }}
-        }}
-        return JSON.stringify(foundUser);
-    }}),
-
-    userLogin: query([text, text], text, async (email, password)=> {
+    }),
+    getUserByEmail: query([text], text, (email) => {
+        {
+            let foundUser = null;
+            let allUsers = users.values();
+            for (let user of allUsers) {
+                {
+                    if (user.email.toLowerCase() === email.toLowerCase()) {
+                        {
+                            foundUser = user;
+                            break;
+                        }
+                    }
+                }
+            }
+            return JSON.stringify(foundUser);
+        }
+    }),
+    userLogin: query([text, text], text, async (email, password) => {
         if (!checkEmailValidity(email)) {
             return 'Invalid email address.'
         }
         let allUsers = users.values();
-        for (let user of allUsers) {{
-            if (user.email.toLowerCase() === email.toLowerCase()) {{
-                // TODO: add bhash
-                if(password === user.password){
-                    return 'Successful login'
+        for (let user of allUsers) {
+            {
+                if (user.email.toLowerCase() === email.toLowerCase()) {
+                    {
+                        // TODO: add bhash
+                        if (password === user.password) {
+                            return 'Successful login'
+                        }
+                        return 'Incorrect email or password.'
+                    }
                 }
-                return 'Incorrect email or password.'
-            }}
-        }}
+            }
+        }
         return 'Incorrect email or password.'
     }),
-
+    validateToken: query([text, text], text, (token: string, email: string) => {
+        let user = getUserByEmail(email)
+        if (!user) {
+            return "Invalid token"
+        }
+        return validate(token, user) ? "Valid token" : `Invalid token ${hash(`Logged in ${user.latestLoginDate}`, JSON.stringify(user))} ${token}`
+    }),
     createACampaign: update([text, text, text, text, text, text], Campaigns, async (_owner: string, _title: string, _description: string, _target: text, _deadline: text, _image: string) => {
         const deadlineTimestamp = Date.parse(_deadline);
         if (isNaN(deadlineTimestamp)) {
             throw new Error("Invalid deadline format");
         }
-    
+
         if (deadlineTimestamp <= Date.now()) {
             throw new Error("The deadline should be a date in the future.");
         }
 
         let campaignId = uuid();
 
-        const newCampaign : Campaigns = {
+        const newCampaign: Campaigns = {
             campaignId: campaignId,
-            title: _title,    
+            title: _title,
             owner: _owner,
             description: _description,
             target: _target,
@@ -139,7 +158,7 @@ export default Canister({
         const numCampaigns = campaigns.len();
 
         return `${numCampaigns} number of campaigns`;
-    }), 
+    }),
 
     getAllCampaigns: query([], Vec(Campaigns), () => {
         return campaigns.values();
