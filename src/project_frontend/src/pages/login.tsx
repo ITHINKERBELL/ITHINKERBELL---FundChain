@@ -12,13 +12,13 @@ const Login = () => {
     const handleLogin = async () => {
         try {
             const res: any = await login(userIdentifier, password);
-            if (res.message === "success") {
+            if (res.message === "Success") {
                 cookies.set('token', res.token);
-                cookies.set('userType', res.user.userType);
+                cookies.set('userType', res.userType);
                 cookies.set('userFullName', res.userFullName);
-                cookies.set('username', res.user.username);
-                cookies.set('email', res.user.email);
-                cookies.set('id', res.user.id);
+                cookies.set('username', res.username);
+                cookies.set('email', res.email);
+                cookies.set('id', res.id);
 
                 navigate("/");
                 window.location.reload();

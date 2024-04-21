@@ -104,7 +104,7 @@ export default Canister({
                 if (user.email.toLowerCase() === email.toLowerCase()) {
                     {
                         if (compareHash(password, user.password, `${user.id}`)) {
-                            return `{ message: 'Success', token: ${await encrypt(user)}, user, userFullName: ${user.name.firstName} ${user.name.middleName} ${user.name.lastName} }`;
+                            return `{ "message": "Success", "token": "${await encrypt(user)}", "userType": "${user.userType}", "username": "${user.username}", "email": "${user.email}", "id": "${user.id}", "userFullName": "${user.name.firstName} ${user.name.middleName} ${user.name.lastName}" }`;
                         }
                         return `Incorrect email or password.`
                     }

@@ -5,10 +5,8 @@ export const cookies = new Cookies();
 
 export const login = async (email: string, password: string) => {
     try {
-        project_backend.userLogin(email, password).then((res: any) => {
-            return JSON.parse(res);
-        });
-        return "Internal Server Error";
+        const res = await project_backend.userLogin(email, password)
+        return JSON.parse(res);
     } catch {
         return "Internal Server Error";
     }
