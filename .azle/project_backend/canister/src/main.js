@@ -101752,6 +101752,15 @@ var compareHash = (text1, text2, id2)=>{
     return hashText1 === text2;
 };
 // src/project_backend/src/util/authentication.ts
+var encrypt = async (user)=>{
+    let dateNow = JSON.stringify(/* @__PURE__ */ new Date());
+    const hashed = hash(`Logged in ${dateNow}`, JSON.stringify(user.id));
+    let currentUser = user.id;
+    users.remove(currentUser);
+    user.latestLoginDate = dateNow;
+    users.insert(currentUser, user);
+    return hashed;
+};
 var validate = (token, user)=>{
     return compareHash(`Logged in ${user.latestLoginDate}`, token, JSON.stringify(user.id));
 };
@@ -101808,7 +101817,7 @@ var src_default = Canister({
                 id: id2,
                 email,
                 username,
-                password,
+                password: hash(password, `${id2}`),
                 userType,
                 name: {
                     firstName,
@@ -101844,7 +101853,7 @@ var src_default = Canister({
             return JSON.stringify(foundUser);
         }
     }),
-    userLogin: query([
+    userLogin: update([
         text,
         text
     ], text, async (email, password)=>{
@@ -101856,10 +101865,10 @@ var src_default = Canister({
             {
                 if (user.email.toLowerCase() === email.toLowerCase()) {
                     {
-                        if (password === user.password) {
-                            return "Successful login";
+                        if (compareHash(password, user.password, `${user.id}`)) {
+                            return `{ message: 'Success', token: ${await encrypt(user)}, user, userFullName: ${user.name.firstName} ${user.name.middleName} ${user.name.lastName} }`;
                         }
-                        return "Incorrect email or password.";
+                        return `Incorrect email or password.`;
                     }
                 }
             }
@@ -101869,12 +101878,16 @@ var src_default = Canister({
     validateToken: query([
         text,
         text
-    ], text, (token, email)=>{
-        let user = getUserByEmail(email);
-        if (!user) {
+    ], text, async (token, email)=>{
+        try {
+            let user = getUserByEmail(email);
+            if (!user) {
+                return "Invalid token";
+            }
+            return validate(token, user) ? "Valid token" : `Invalid token`;
+        } catch (e) {
             return "Invalid token";
         }
-        return validate(token, user) ? "Valid token" : `Invalid token ${hash(`Logged in ${user.latestLoginDate}`, JSON.stringify(user))} ${token}`;
     }),
     createACampaign: update([
         text,

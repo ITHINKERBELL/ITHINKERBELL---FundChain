@@ -6,7 +6,7 @@ service: () -> {
     getCampaignsLength: () -> (text);
     getUserByEmail: (text) -> (text) query;
     greet: (text) -> (text) query;
-    userLogin: (text, text) -> (text) query;
+    userLogin: (text, text) -> (text);
     userRegistration: (text, text, text, text, text, text, text, text) -> (text);
     validateToken: (text, text) -> (text) query;
 }

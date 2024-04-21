@@ -104,7 +104,7 @@ export default Canister({
                 if (user.email.toLowerCase() === email.toLowerCase()) {
                     {
                         if (compareHash(password, user.password, `${user.id}`)) {
-                            return await encrypt(user)
+                            return `{ message: 'Success', token: ${await encrypt(user)}, user, userFullName: ${user.name.firstName} ${user.name.middleName} ${user.name.lastName} }`;
                         }
                         return `Incorrect email or password.`
                     }
@@ -113,12 +113,17 @@ export default Canister({
         }
         return 'Incorrect email or password.'
     }),
-    validateToken: query([text, text], text, (token: string, email: string) => {
-        let user = getUserByEmail(email)
-        if (!user) {
+    validateToken: query([text, text], text, async (token: string, email: string) => {
+        try {
+
+            let user = getUserByEmail(email)
+            if (!user) {
+                return "Invalid token"
+            }
+            return validate(token, user) ? "Valid token" : `Invalid token`
+        } catch {
             return "Invalid token"
         }
-        return validate(token, user) ? "Valid token" : `Invalid token ${hash(`Logged in ${user.latestLoginDate}`, JSON.stringify(user))} ${token}`
     }),
     createACampaign: update([text, text, text, text, text, text], Campaigns, async (_owner: string, _title: string, _description: string, _target: text, _deadline: text, _image: string) => {
         const deadlineTimestamp = Date.parse(_deadline);
