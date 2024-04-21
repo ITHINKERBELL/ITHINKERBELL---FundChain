@@ -2,6 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faScroll, faUser, faRightFromBracket, faSquarePlus } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
+import { logout } from '../services/entry';
 
 
 const Sidebar: React.FC = () => {
@@ -10,22 +11,22 @@ const Sidebar: React.FC = () => {
       {/*home*/}
       <a href="">
         <div className="h-10 w-10 flex items-center justify-center rounded-lg cursor-pointer hover:bg-gray-800 hover:text-white hover:duration-300 hover:ease-linear focus:bg-gray-800">
-            <FontAwesomeIcon icon={faHouse} />
+          <FontAwesomeIcon icon={faHouse} />
         </div>
       </a>
 
       {/*add campaigns*/}
       <Link to="/create-campaign">
-      <a href="">
-        <div className="h-10 w-10 flex items-center justify-center rounded-lg cursor-pointer hover:bg-gray-800 hover:text-white hover:duration-300 hover:ease-linear focus:bg-gray-800">
-          <FontAwesomeIcon icon={faSquarePlus} />
-        </div>
-      </a>
+        <a href="">
+          <div className="h-10 w-10 flex items-center justify-center rounded-lg cursor-pointer hover:bg-gray-800 hover:text-white hover:duration-300 hover:ease-linear focus:bg-gray-800">
+            <FontAwesomeIcon icon={faSquarePlus} />
+          </div>
+        </a>
       </Link>
 
       {/*campaigns*/}
       <div className="h-10 w-10 flex items-center justify-center rounded-lg cursor-pointer hover:bg-gray-800 hover:text-white hover:duration-300 hover:ease-linear focus:bg-gray-800">
-         <FontAwesomeIcon icon={faScroll} />
+        <FontAwesomeIcon icon={faScroll} />
       </div>
 
       {/*user*/}
@@ -36,12 +37,14 @@ const Sidebar: React.FC = () => {
       </a>
 
       {/*logout*/}
-      <a href="">
-        <div className="h-10 w-10 flex items-center justify-center rounded-lg cursor-pointer hover:bg-gray-800 hover:text-white hover:duration-300 hover:ease-linear focus:bg-gray-800">
-            <FontAwesomeIcon icon={faRightFromBracket} />
-        </div>
-      </a>
- 
+      <div onClick={() => {
+        logout();
+        window.location.reload();
+      }}
+        className="h-10 w-10 flex items-center justify-center rounded-lg cursor-pointer hover:bg-gray-800 hover:text-white hover:duration-300 hover:ease-linear focus:bg-gray-800">
+        <FontAwesomeIcon icon={faRightFromBracket} />
+      </div>
+
     </aside>
   );
 };
