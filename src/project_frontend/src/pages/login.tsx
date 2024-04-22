@@ -32,11 +32,12 @@ const Login = () => {
     };
 
     return (
-        <div className="login-container">
-            <div className="wrapper">
+        <div className="login-container flex justify-center items-center h-screen">
+            <div className="wrapper bg-gray-100 p-8 rounded-lg shadow-md">
                 <form>
-                    <div className="input-box">
-                        <input
+                <div className="login-text font-semibold text-center mb-4 text-lg">Login to your account</div>
+                <div className="input-box mb-4">
+                        <input className="w-full px-3 py-2 border rounded-md"
                             type="text"
                             placeholder="Email or Username"
                             required
@@ -45,8 +46,8 @@ const Login = () => {
                             ref={emailRef}
                         />
                     </div>
-                    <div className="input-box">
-                        <input
+                    <div className="input-box mb-4">
+                        <input className="w-full px-3 py-2 border rounded-md"
                             type={showPassword ? "text" : "password"}
                             placeholder="Password"
                             required
@@ -54,14 +55,14 @@ const Login = () => {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
-                    <div className="remember-forgot">
-                        <label>
+                    <div className="remember-forgot mb-4 flex justify-between items-center">
+                        <label className="mr-4">
                             {/* TODO: fix this */}
-                            <input type="checkbox" /> Remember me?
+                            <input type="checkbox" className="mr-2" /> Remember me?
                         </label>
-                        <a href="#"> Forgot password?</a>
+                        <a href="#" className="text-blue-500">Forgot password?</a>
                     </div>
-                    <button className="login" type="button" onClick={handleLogin}>
+                    <button className="login w-full py-2 rounded-md bg-blue-500 text-white font-semibold hover:bg-blue-600" type="button" onClick={handleLogin}>
                         Login
                     </button>
 
