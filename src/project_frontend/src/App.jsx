@@ -14,7 +14,7 @@ function App() {
         }
         fetchData()
     }, []);
-    return <>{isLoggedIn ? <MainContent /> : <Login />}</>;
+    return <>{isLoggedIn ? <MainContent /> : <MainContent />}</>;
 }
 
 export default App;

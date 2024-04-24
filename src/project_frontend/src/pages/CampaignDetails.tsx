@@ -11,7 +11,7 @@ import { calculateBarPercentage } from "../utils";
 const CampaignDetails: React.FC = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
-  const { donate, getDonations, contract, address } = useStateContext();
+  // const { donate, getDonations, contract, address } = useStateContext();
 
   const [isLoading, setIsLoading] = useState(false);
   const [amount, setAmount] = useState("");
@@ -20,20 +20,20 @@ const CampaignDetails: React.FC = () => {
   >([]);
   const remainingDays = daysLeft(new Date(state.deadline));
 
-  const fetchDonators = async () => {
-    const data = await getDonations(state.pId);
+  // const fetchDonators = async () => {
+  //   const data = await getDonations(state.pId);
 
-    setDonators(data);
-  };
+  //   setDonators(data);
+  // };
 
-  useEffect(() => {
-    if (contract) fetchDonators();
-  }, [contract, address]);
+  // useEffect(() => {
+  //   if (contract) fetchDonators();
+  // }, [contract, address]);
 
   const handleDonate = async () => {
     setIsLoading(true);
 
-    await donate(state.pId, amount);
+    // await donate(state.pId, amount);
 
     navigate("/");
     setIsLoading(false);
@@ -68,7 +68,7 @@ const CampaignDetails: React.FC = () => {
           <CountBox title="Days Left" value={remainingDays} />
           <CountBox
             title={`Raised of ${state.target}`}
-            value={state.amountCollected}
+            value={ Number(state.amountCollected)}
           />
           <CountBox title="Total Backers" value={donators.length} />
         </div>
