@@ -9,14 +9,14 @@
       "wasm": ".azle/project_backend/project_backend.wasm"
     },
     "project_frontend": {
-      "dependencies": [
-        "project_backend"
-      ],
-      "source": [
-        "src/project_frontend/dist"
-      ],
+      "dependencies": ["project_backend"],
+      "source": ["src/project_frontend/dist"],
       "type": "assets",
       "workspace": "project_frontend"
+    },
+    "internet_identity": {
+      "type": "pull",
+      "id": "rdmx6-jaaaa-aaaaa-aaadq-cai"
     }
   },
   "defaults": {
