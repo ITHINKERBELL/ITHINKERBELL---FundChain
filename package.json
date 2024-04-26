@@ -17,6 +17,7 @@
     "src/project_frontend"
   ],
   "dependencies": {
+    "@dfinity/auth-client": "^1.2.0",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "react-router-dom": "^6.22.3"

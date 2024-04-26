@@ -1,4 +1,4 @@
-import { Canister, query, Record, text, Opt, Vec, int, StableBTreeMap, Principal, update, nat } from 'azle';
+import { Canister, query, Record, text, Opt, Vec, int, StableBTreeMap, Principal, update, nat, ic } from 'azle';
 import { checkEmailValidity, checkEveryInputForSignup } from './util/checkValidation';
 import { v4 as uuid } from 'uuid';
 import { getUserByEmail } from './util/getUserByEmail';
@@ -174,6 +174,23 @@ export default Canister({
     //     return campaigns.get(_campaignTitle);
     // }),
 
+    getMe: query([], text, () => {
+        let currentPrincipal = ic.caller();
+   
+        try {
+            // If user does not exist, return error.
+            if (!users.containsKey(currentPrincipal)) {
+                return `Unauthorized: Create an account first ${currentPrincipal}`;
+            }
+   
+            // Return the current user.
+            const user = users.get(currentPrincipal);
+            return JSON.stringify(user); // Assuming you want to return the user as a JSON string
+        } catch (error) {
+            // If any error occurs, return it as a string.
+            return `InternalError: ${error}`;
+        }
+    }),
 })
 
 function generateId(): Principal {

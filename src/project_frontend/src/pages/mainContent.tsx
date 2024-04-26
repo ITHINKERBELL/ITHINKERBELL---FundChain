@@ -5,6 +5,7 @@ import Sidebar from "../components/Sidebar";
 import Home from "./home";
 import CampaignDetails from "./CampaignDetails";
 import { ToastContainer } from "react-toastify";
+import Login_ii from "./Login_ii";
 
 function MainContent() {
   // <ToastContainer
@@ -35,6 +36,7 @@ function MainContent() {
           {/* <Route path="/profile" element={<Profile />} /> */}
           <Route path="/create-campaign" element={<CreateCampaign />} />
           <Route path="/campaign-details/:id" element={<CampaignDetails />} />
+          <Route path="/login_ii" element={<Login_ii />} />
         </Routes>
       </div>
     </div>
