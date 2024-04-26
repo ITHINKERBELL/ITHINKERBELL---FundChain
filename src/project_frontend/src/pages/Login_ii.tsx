@@ -43,14 +43,21 @@ const Login_ii: React.FC = () => {
       });
       const identity = authClient.getIdentity();
       console.log(identity);
-      // const agent = new HttpAgent({ identity });
-      // const newActor = createActor(
-      //   process.env.CANISTER_ID_II_INTEGRATION_BACKEND,
-      //   {
-      //     agent,
-      //   }
-      // );
-      // setActor(newActor);
+
+      const canisterId = process.env.CANISTER_ID_PROJECT_BACKEND;
+
+      console.log(canisterId);
+
+    if (!canisterId) {
+      throw new Error('CANISTER_ID_II_INTEGRATION_BACKEND is not set');
+    }
+    const newActor = createActor(canisterId, {
+      agentOptions: {
+        identity,
+      },
+    });
+      setActor(newActor);
+      console.log(actor);
     } catch (error) {
       console.error("Error logging in:", error);
     }
