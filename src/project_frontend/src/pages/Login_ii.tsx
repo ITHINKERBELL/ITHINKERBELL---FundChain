@@ -43,14 +43,14 @@ const Login_ii: React.FC = () => {
       });
       const identity = authClient.getIdentity();
       console.log(identity);
-    //   const agent = new HttpAgent({ identity });
-    //   const newActor = createActor(
-    //     process.env.CANISTER_ID_II_INTEGRATION_BACKEND,
-    //     {
-    //       agent,
-    //     }
-    //   );
-    //   setActor(newActor);
+      // const agent = new HttpAgent({ identity });
+      // const newActor = createActor(
+      //   process.env.CANISTER_ID_II_INTEGRATION_BACKEND,
+      //   {
+      //     agent,
+      //   }
+      // );
+      // setActor(newActor);
     } catch (error) {
       console.error("Error logging in:", error);
     }
