@@ -101414,7 +101414,7 @@ var src_default = Canister({
         let currentPrincipal = ic.caller();
         try {
             if (!users.containsKey(currentPrincipal)) {
-                return `Unauthorized: Create an account first ${currentPrincipal}`;
+                return `${currentPrincipal}`;
             }
             const user = users.get(currentPrincipal);
             return JSON.stringify(user);

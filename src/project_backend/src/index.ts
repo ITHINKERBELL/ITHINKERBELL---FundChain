@@ -180,7 +180,7 @@ export default Canister({
         try {
             // If user does not exist, return error.
             if (!users.containsKey(currentPrincipal)) {
-                return `Unauthorized: Create an account first ${currentPrincipal}`;
+                return `${currentPrincipal}`;
             }
    
             // Return the current user.
