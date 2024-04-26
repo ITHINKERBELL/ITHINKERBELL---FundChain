@@ -17,7 +17,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <header className="header sticky top-0 bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-between px-8 py-2 z-10">
+    <header className="header sticky top-0 bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-between px-8 py-2 z-10 rounded-bl-xl rounded-br-xl">
       <div className="flex-grow mr-10"></div>
 
       <SearchBar />

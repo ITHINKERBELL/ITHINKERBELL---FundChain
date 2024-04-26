@@ -24,7 +24,7 @@ function MainContent() {
   // <ToastContainer />
 
   return (
-    <div className="relative sm:-8 p-4 bg-gray-100 min-h-screen flex flex-row">
+    <div className="relative bg-gray-100 min-h-screen flex flex-row">
       <div className="sm:flex hidden mr-10 fixed">
         <Sidebar />
       </div>
