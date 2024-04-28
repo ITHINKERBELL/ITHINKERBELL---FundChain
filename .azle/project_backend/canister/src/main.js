@@ -17,6 +17,9 @@ _export(exports, {
     },
     users: function() {
         return users;
+    },
+    users_II: function() {
+        return users_II;
     }
 });
 function _extends() {
@@ -99621,19 +99624,19 @@ var AzleResult = class {
 function Result(ok, err) {
     return new AzleResult(ok, err);
 }
-((Result2)=>{
+((Result3)=>{
     function Ok(value) {
         return {
             Ok: value
         };
     }
-    Result2.Ok = Ok;
+    Result3.Ok = Ok;
     function Err(value) {
         return {
             Err: value
         };
     }
-    Result2.Err = Err;
+    Result3.Err = Err;
 })(Result || (Result = {}));
 // node_modules/azle/src/lib/candid/serde/visitors/visit/variant/azle_variant.ts
 function visitAzleVariant(visitor, fields, data) {
@@ -101254,6 +101257,21 @@ var User2 = Record2({
     latestLoginDate: text
 });
 var users = StableBTreeMap(0);
+var User_II = Record2({
+    id: Principal3,
+    email: text,
+    username: text,
+    userType: text,
+    wallet: text,
+    name: Record2({
+        firstName: text,
+        lastName: text,
+        middleName: text,
+        birthday: text
+    }),
+    latestLoginDate: text
+});
+var users_II = StableBTreeMap(4);
 var Campaigns = Record2({
     campaignId: text,
     title: text,
@@ -101410,16 +101428,69 @@ var src_default = Canister({
     // getCampaignByTitle: query([CampaignTitle], Opt(Campaigns), (_campaignTitle: CampaignTitle) => {
     //     return campaigns.get(_campaignTitle);
     // }),
-    getMe: query([], text, ()=>{
+    getMe: query([], Principal3, ()=>{
         let currentPrincipal = ic.caller();
-        try {
-            if (!users.containsKey(currentPrincipal)) {
-                return `${currentPrincipal}`;
+        if (!users_II.containsKey(currentPrincipal)) {
+            return currentPrincipal;
+        }
+        const user = users_II.get(currentPrincipal);
+        return currentPrincipal;
+    }),
+    getAllUsers_II: query([], Vec2(User_II), ()=>{
+        return users_II.values();
+    }),
+    user_II_Registration: update([
+        text,
+        text,
+        text,
+        text,
+        text,
+        text,
+        text,
+        text
+    ], User_II, async (email, username, userType, wallet, firstName, lastName, middleName, birthday)=>{
+        let currentPrincipal = ic.caller();
+        const newUser_II = {
+            id: currentPrincipal,
+            email,
+            username,
+            userType,
+            wallet,
+            name: {
+                firstName,
+                lastName,
+                middleName,
+                birthday
+            },
+            latestLoginDate: JSON.stringify(/* @__PURE__ */ new Date())
+        };
+        users_II.insert(newUser_II.id, newUser_II);
+        return newUser_II;
+    }),
+    user_II_Login: update([
+        Principal3
+    ], text, async (principal)=>{
+        {
+            try {
+                {
+                    if (!users_II.containsKey(principal)) {
+                        {
+                            return `User doesn't exist.`;
+                        }
+                    }
+                    const user = users_II.get(principal);
+                    return JSON.stringify({
+                        message: "success",
+                        user
+                    });
+                }
+            } catch (error) {
+                {
+                    return `InternalError: ${{
+                        error
+                    }}`;
+                }
             }
-            const user = users.get(currentPrincipal);
-            return JSON.stringify(user);
-        } catch (error) {
-            return `InternalError: ${error}`;
         }
     })
 });

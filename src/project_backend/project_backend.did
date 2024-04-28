@@ -2,12 +2,15 @@ service: () -> {
     createACampaign: (text, text, text, text, text, text) -> (record {title:text; owner:text; amountCollected:nat; campaignId:text; description:text; deadline:text; donators:vec text; target:text; image:text; donations:vec int});
     getAllCampaigns: () -> (vec record {title:text; owner:text; amountCollected:nat; campaignId:text; description:text; deadline:text; donators:vec text; target:text; image:text; donations:vec int}) query;
     getAllUsers: () -> (vec record {id:principal; userType:text; username:text; password:text; name:record {middleName:text; birthday:text; lastName:text; firstName:text}; email:text; latestLoginDate:text}) query;
+    getAllUsers_II: () -> (vec record {id:principal; userType:text; username:text; name:record {middleName:text; birthday:text; lastName:text; firstName:text}; email:text; wallet:text; latestLoginDate:text}) query;
     getCampaignById: (text) -> (opt record {title:text; owner:text; amountCollected:nat; campaignId:text; description:text; deadline:text; donators:vec text; target:text; image:text; donations:vec int}) query;
     getCampaignsLength: () -> (text);
-    getMe: () -> (text) query;
+    getMe: () -> (principal) query;
     getUserByEmail: (text) -> (text) query;
     greet: (text) -> (text) query;
     userLogin: (text, text) -> (text);
     userRegistration: (text, text, text, text, text, text, text, text) -> (text);
+    user_II_Login: (principal) -> (text);
+    user_II_Registration: (text, text, text, text, text, text, text, text) -> (record {id:principal; userType:text; username:text; name:record {middleName:text; birthday:text; lastName:text; firstName:text}; email:text; wallet:text; latestLoginDate:text});
     validateToken: (text, text) -> (text) query;
 }

@@ -1,4 +1,4 @@
-import { Canister, query, Record, text, Opt, Vec, int, StableBTreeMap, Principal, update, nat, ic } from 'azle';
+import { Canister, query, Record, text, Opt, Vec, int, StableBTreeMap, Principal, update, nat, ic, Result } from 'azle';
 import { checkEmailValidity, checkEveryInputForSignup } from './util/checkValidation';
 import { v4 as uuid } from 'uuid';
 import { getUserByEmail } from './util/getUserByEmail';
@@ -23,6 +23,24 @@ const User = Record({
 
 export type User = typeof User.tsType;
 export let users = StableBTreeMap<Principal, User>(0)
+
+const User_II = Record({
+    id: Principal,
+    email: text,
+    username: text,
+    userType: text,
+    wallet: text,
+    name: Record({
+        firstName: text,
+        lastName: text,
+        middleName: text,
+        birthday: text
+    }),
+    latestLoginDate: text
+})
+
+export type User_II = typeof User_II.tsType;
+export let users_II = StableBTreeMap<Principal, User_II>(4)
 
 const Campaigns = Record({
     campaignId: text,
@@ -174,23 +192,61 @@ export default Canister({
     //     return campaigns.get(_campaignTitle);
     // }),
 
-    getMe: query([], text, () => {
+    getMe: query([], Principal, () => {
         let currentPrincipal = ic.caller();
    
-        try {
             // If user does not exist, return error.
-            if (!users.containsKey(currentPrincipal)) {
-                return `${currentPrincipal}`;
+            if (!users_II.containsKey(currentPrincipal)) {
+                return currentPrincipal;
             }
    
             // Return the current user.
-            const user = users.get(currentPrincipal);
-            return JSON.stringify(user); // Assuming you want to return the user as a JSON string
-        } catch (error) {
-            // If any error occurs, return it as a string.
-            return `InternalError: ${error}`;
-        }
+            const user = users_II.get(currentPrincipal);
+            // return JSON.stringify(user); // Assuming you want to return the user as a JSON string
+            return currentPrincipal;
+
     }),
+
+    getAllUsers_II: query([], Vec(User_II), () => {
+        return users_II.values()
+    }),
+
+    user_II_Registration: update([text, text, text, text, text, text, text, text], User_II, async (email, username, userType, wallet, firstName, lastName, middleName, birthday) => {
+        let currentPrincipal = ic.caller();
+
+        const newUser_II: User_II = {
+            id: currentPrincipal,
+            email,
+            username,
+            userType,
+            wallet,
+            name: {
+                firstName,
+                lastName,
+                middleName,
+                birthday
+            },
+            latestLoginDate: JSON.stringify(new Date())
+        };
+        users_II.insert(newUser_II.id, newUser_II)
+
+        return newUser_II;
+    }),
+
+    user_II_Login: update([Principal], text, async (principal) => {{
+        try {{
+            if (!users_II.containsKey(principal)) {{
+                return `User doesn't exist.`;
+            }}
+    
+            const user = users_II.get(principal);
+            return JSON.stringify({ message: 'success', user: user }); 
+        }} catch (error) {{
+            return `InternalError: ${{error}}`;
+        }}
+    }}),
+
+    
 })
 
 function generateId(): Principal {
