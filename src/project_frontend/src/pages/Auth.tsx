@@ -10,18 +10,15 @@ import { Principal } from "@dfinity/principal";
 import { useActor } from "../context/ActorContext";
 
 const Auth: React.FC = () => {
-  const [actor, setActord] = useState(project_backend);
-
-  const { setActor } = useActor();
-
-  useEffect(() => {
-    console.log(actor);
-    const principal = actor.getMe();
-    console.log("getting the principal at the start --> " + principal.toString());
-    localStorage.setItem('actor', JSON.stringify(actor));
-  }, [actor]);
 
   const navigate = useNavigate();
+  const { setActor, actor } = useActor();
+
+  // useEffect(() => {
+  //   // const principal = actor.getMe();
+  //   // console.log("getting the principal at the start --> " + principal.toString());
+  // }, [actor]);
+
 
   const handleWhoAmIClick = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -66,7 +63,6 @@ const Auth: React.FC = () => {
         identity,
       },
     });
-      setActord(newActor);
       setActor(newActor);
       const principal = await newActor.getMe();
       console.log("login button, testing if it will get the right principal --> " + principal.toString());
@@ -98,6 +94,8 @@ const Auth: React.FC = () => {
   
   const userChecker = async (principal: Principal) => {
     try {
+      console.log(principal);
+      console.log("user checker --> " + principal.toString());
       const res = await actor.userChecker(principal);
       console.log(principal.toString());
       console.log(res);
@@ -140,16 +138,11 @@ const Auth: React.FC = () => {
         identity,
       },
     });
-      setActord(newActor);
       setActor(newActor);
-      console.log(newActor);
-      // localStorage.setItem('actor', newActor);
-      console.log(JSON.stringify(newActor));
-      // localStorage.setItem('actor', JSON.stringify(newActor));
-
       const principal = await newActor.getMe();
-      console.log("register button, testing if it will get the right principal --> " + principal.toString());
-      userChecker(principal);
+      console.log(principal);
+      console.log("register button, principal --> " + principal.toString());
+      await userChecker(principal);
     } catch (error) {
       console.error("Error logging in:", error);
     }

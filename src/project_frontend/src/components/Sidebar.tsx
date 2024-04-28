@@ -19,7 +19,7 @@ const Sidebar: React.FC = () => {
 
   const handleLogoutClick = () => {
     navigate("/auth");
-    resetActor();
+    // resetActor();
   };
 
   return (

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import {
   project_backend,
   createActor,
 } from "../../../declarations/project_backend";
 import { useActor } from "../context/ActorContext";
+import { Principal } from '@dfinity/principal';
 
 
 // TODO: connect the form to user_II_Registration function in our backend
@@ -12,6 +14,9 @@ import { useActor } from "../context/ActorContext";
 const Register_ii: React.FC = () => {
   // const [actor, setActor] = useState(project_backend);
   const { actor } = useActor();
+  const navigate = useNavigate();
+  const [res, setRes] = useState<any>(null);
+  const [principal, setPrincipal] = useState<any>(null);
   const [formData, setFormData] = useState({
     email: '',
     username: '',
@@ -23,16 +28,15 @@ const Register_ii: React.FC = () => {
     birthday: '',
   });
 
-  // const [actord, setActord] = useState<any>(null);
-
   useEffect(()=>{
     console.log(actor);
     getMe();
-  });
+  }, []);
 
   const getMe = async () => {
-    const principal = await actor.getMe();
-    console.log(principal.toString());
+    const principal_id = await actor.getMe();
+    setPrincipal(principal_id);
+    console.log(principal_id.toString());
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,19 +49,61 @@ const Register_ii: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Here you can add your logic for form submission
-    console.log(formData);
-    // Reset form after submission
-    setFormData({
-      email: '',
-      username: '',
-      userType: '',
-      wallet: '',
-      firstName: '',
-      middleName: '',
-      lastName: '',
-      birthday: '',
-    });
+    const form = e.currentTarget;
+
+    const emailInput = form.elements.namedItem(
+      "email"
+    ) as HTMLInputElement;
+    const usernameInput = form.elements.namedItem(
+      "username"
+    ) as HTMLInputElement;
+    const userTypeInput = form.elements.namedItem(
+      "userType"
+    ) as HTMLInputElement;
+    const walletInput = form.elements.namedItem(
+      "wallet") as HTMLInputElement;
+    const firstNameInput = form.elements.namedItem(
+      "firstName"
+    ) as HTMLInputElement;
+    const middleNameInput = form.elements.namedItem(
+      "middleName") as HTMLInputElement;
+    const lastNameInput = form.elements.namedItem(
+      "lastName"
+    ) as HTMLInputElement;
+    const birthdayInput = form.elements.namedItem(
+      "birthday") as HTMLInputElement;
+
+    const emailValue = emailInput.value;
+    const usernameValue = usernameInput.value;
+    const userTypeValue = userTypeInput.value;
+    const walletValue = walletInput.value;
+    const firstNameValue = firstNameInput.value;
+    const middleNameValue = middleNameInput.value;
+    const lastNameValue = lastNameInput.value;
+    const birthdayValue = birthdayInput.value;
+
+    project_backend
+      .user_II_Registration(
+        principal,
+        emailValue,
+        usernameValue,
+        userTypeValue,
+        walletValue,
+        firstNameValue,
+        middleNameValue,
+        lastNameValue,
+        birthdayValue
+      )
+      .then((res) => {
+        console.log(res);
+        console.log("Registered successfully! Please login.")
+        setRes(res);
+        navigate("/auth");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
   };
 
   return (
