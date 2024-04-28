@@ -101438,18 +101438,23 @@ var src_default = Canister({
     }),
     userChecker: query([
         Principal3
-    ], text, ()=>{
+    ], text, async (principal)=>{
         let currentPrincipal = ic.caller();
-        if (!users_II.containsKey(currentPrincipal)) {
+        if (!users_II.containsKey(principal)) {
             return "unregistered";
+        } else if (users_II.containsKey(principal)) {
+            const principall = principal.toString();
+            return `registered: ${principall}`;
         }
-        const user = users_II.get(currentPrincipal);
-        return "registered";
+        const user = users_II.get(principal);
+        const userr = user.toString();
+        return userr;
     }),
     getAllUsers_II: query([], Vec2(User_II), ()=>{
         return users_II.values();
     }),
     user_II_Registration: update([
+        Principal3,
         text,
         text,
         text,
@@ -101458,10 +101463,9 @@ var src_default = Canister({
         text,
         text,
         text
-    ], User_II, async (email, username, userType, wallet, firstName, lastName, middleName, birthday)=>{
-        let currentPrincipal = ic.caller();
+    ], User_II, async (id2, email, username, userType, wallet, firstName, lastName, middleName, birthday)=>{
         const newUser_II = {
-            id: currentPrincipal,
+            id: id2,
             email,
             username,
             userType,

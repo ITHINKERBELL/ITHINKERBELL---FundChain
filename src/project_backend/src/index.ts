@@ -62,7 +62,6 @@ type Campaigns = typeof Campaigns.tsType;
 // new map testing
 let campaigns = StableBTreeMap<CampaignId, Campaigns>(3);
 
-
 export default Canister({
 
     greet: query([text], text, (name) => {
@@ -207,18 +206,22 @@ export default Canister({
 
     }),
 
-    userChecker: query([Principal], text, () => {
+    userChecker: query([Principal], text, async (principal) => {
         let currentPrincipal = ic.caller();
-   
-            // If user does not exist, return error.
-            if (!users_II.containsKey(currentPrincipal)) {
-                return "unregistered";
-            }
-   
-            // Return the current user.
-            const user = users_II.get(currentPrincipal);
-            // return JSON.stringify(user); // Assuming you want to return the user as a JSON string
-            return "registered";
+
+        // If user does not exist, return error.
+        if (!users_II.containsKey(principal)) {
+            return "unregistered";
+        }else if(users_II.containsKey(principal)){
+            const principall = principal.toString();
+            return `registered: ${principall}`
+        }
+
+        // Return the current user.
+        const user = users_II.get(principal);
+        const userr = user.toString();
+        // return JSON.stringify(user); // Assuming you want to return the user as a JSON string
+        return userr;
 
     }),
 
@@ -226,11 +229,10 @@ export default Canister({
         return users_II.values()
     }),
 
-    user_II_Registration: update([text, text, text, text, text, text, text, text], User_II, async (email, username, userType, wallet, firstName, lastName, middleName, birthday) => {
-        let currentPrincipal = ic.caller();
+    user_II_Registration: update([Principal, text, text, text, text, text, text, text, text], User_II, async (id, email, username, userType, wallet, firstName, lastName, middleName, birthday) => {
 
         const newUser_II: User_II = {
-            id: currentPrincipal,
+            id,
             email,
             username,
             userType,

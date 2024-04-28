@@ -12,6 +12,6 @@ service: () -> {
     userLogin: (text, text) -> (text);
     userRegistration: (text, text, text, text, text, text, text, text) -> (text);
     user_II_Login: (principal) -> (text);
-    user_II_Registration: (text, text, text, text, text, text, text, text) -> (record {id:principal; userType:text; username:text; name:record {middleName:text; birthday:text; lastName:text; firstName:text}; email:text; wallet:text; latestLoginDate:text});
+    user_II_Registration: (principal, text, text, text, text, text, text, text, text) -> (record {id:principal; userType:text; username:text; name:record {middleName:text; birthday:text; lastName:text; firstName:text}; email:text; wallet:text; latestLoginDate:text});
     validateToken: (text, text) -> (text) query;
 }

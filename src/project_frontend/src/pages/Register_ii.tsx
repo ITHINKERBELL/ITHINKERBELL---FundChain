@@ -1,8 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
+import {
+  project_backend,
+  createActor,
+} from "../../../declarations/project_backend";
+import { useActor } from "../context/ActorContext";
 
+
+// TODO: connect the form to user_II_Registration function in our backend
 
 const Register_ii: React.FC = () => {
+  // const [actor, setActor] = useState(project_backend);
+  const { actor } = useActor();
   const [formData, setFormData] = useState({
     email: '',
     username: '',
@@ -13,6 +22,18 @@ const Register_ii: React.FC = () => {
     lastName: '',
     birthday: '',
   });
+
+  // const [actord, setActord] = useState<any>(null);
+
+  useEffect(()=>{
+    console.log(actor);
+    getMe();
+  });
+
+  const getMe = async () => {
+    const principal = await actor.getMe();
+    console.log(principal.toString());
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

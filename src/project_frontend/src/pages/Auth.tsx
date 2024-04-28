@@ -7,9 +7,20 @@ import {
 import { AuthClient } from "@dfinity/auth-client";
 import { HttpAgent } from "@dfinity/agent";
 import { Principal } from "@dfinity/principal";
+import { useActor } from "../context/ActorContext";
 
 const Auth: React.FC = () => {
-  const [actor, setActor] = useState(project_backend);
+  const [actor, setActord] = useState(project_backend);
+
+  const { setActor } = useActor();
+
+  useEffect(() => {
+    console.log(actor);
+    const principal = actor.getMe();
+    console.log("getting the principal at the start --> " + principal.toString());
+    localStorage.setItem('actor', JSON.stringify(actor));
+  }, [actor]);
+
   const navigate = useNavigate();
 
   const handleWhoAmIClick = async (
@@ -55,8 +66,8 @@ const Auth: React.FC = () => {
         identity,
       },
     });
+      setActord(newActor);
       setActor(newActor);
-
       const principal = await newActor.getMe();
       console.log("login button, testing if it will get the right principal --> " + principal.toString());
       login(principal);
@@ -71,14 +82,13 @@ const Auth: React.FC = () => {
       const res = await actor.user_II_Login(principal);
       if (res === "User doesn't exist.") {
         console.log("User doesn't exist. Register first.");
-        // TODO: navigate to the register page
         navigate("/register");
       } else {
         const result = JSON.parse(res);
         console.log(result.message);
         console.log(result.user);
         if (result.message === "success") {
-          navigate("/");
+          navigate("/home");
         };
       }
     } catch (error) {
@@ -88,11 +98,11 @@ const Auth: React.FC = () => {
   
   const userChecker = async (principal: Principal) => {
     try {
-      // calls the login function in the backend and pass the principal of the identity 
       const res = await actor.userChecker(principal);
+      console.log(principal.toString());
+      console.log(res);
       if (res === "unregistered") {
         console.log("User doesn't exist. Register first.");
-        // TODO: navigate to the register page
         navigate("/register");
       } else if (res === "registered") {
         console.log("Sorry, this internet identity is already registered. Please try logging in with your existing account.");
@@ -130,7 +140,12 @@ const Auth: React.FC = () => {
         identity,
       },
     });
+      setActord(newActor);
       setActor(newActor);
+      console.log(newActor);
+      // localStorage.setItem('actor', newActor);
+      console.log(JSON.stringify(newActor));
+      // localStorage.setItem('actor', JSON.stringify(newActor));
 
       const principal = await newActor.getMe();
       console.log("register button, testing if it will get the right principal --> " + principal.toString());

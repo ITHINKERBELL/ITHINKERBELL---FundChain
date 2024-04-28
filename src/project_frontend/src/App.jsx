@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import MainContent from "./pages/mainContent";
-import Login from "./pages/login";
 import { authenticateToken } from "./services/authentication";
+import { ActorProvider } from "./context/ActorContext"; 
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -13,7 +13,12 @@ function App() {
     };
     fetchData();
   }, []);
-  return <>{isLoggedIn ? <MainContent /> : <MainContent />}</>;
+
+  return (
+    <ActorProvider> 
+      {isLoggedIn ? <MainContent /> : <MainContent />}
+    </ActorProvider>
+  );
 }
 
 export default App;
