@@ -101450,6 +101450,15 @@ var src_default = Canister({
         const userr = user.toString();
         return userr;
     }),
+    userDetails: query([
+        Principal3
+    ], text, async (principal)=>{
+        const user = users_II.get(principal);
+        return JSON.stringify({
+            message: "success",
+            user
+        });
+    }),
     getAllUsers_II: query([], Vec2(User_II), ()=>{
         return users_II.values();
     }),

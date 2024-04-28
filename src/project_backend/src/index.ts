@@ -225,6 +225,11 @@ export default Canister({
 
     }),
 
+    userDetails: query([Principal], text, async (principal: Principal) => {
+        const user = users_II.get(principal);
+        return JSON.stringify({ message: 'success', user: user }); 
+    }),
+
     getAllUsers_II: query([], Vec(User_II), () => {
         return users_II.values()
     }),
@@ -263,7 +268,6 @@ export default Canister({
         }}
     }}),
 
-    
 })
 
 function generateId(): Principal {

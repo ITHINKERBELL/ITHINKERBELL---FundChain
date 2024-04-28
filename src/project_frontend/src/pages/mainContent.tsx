@@ -7,6 +7,7 @@ import CampaignDetails from "./CampaignDetails";
 import { ToastContainer } from "react-toastify";
 import Auth from "./Auth";
 import Register_ii from "./Register_ii";
+import Profile from "./Profile";
 
 function MainContent() {
   // <ToastContainer
@@ -34,7 +35,7 @@ function MainContent() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
-          {/* <Route path="/profile" element={<Profile />} /> */}
+          <Route path="/profile" element={<Profile />} />
           <Route path="/create-campaign" element={<CreateCampaign />} />
           <Route path="/campaign-details/:id" element={<CampaignDetails />} />
           <Route path="/auth" element={<Auth />} />

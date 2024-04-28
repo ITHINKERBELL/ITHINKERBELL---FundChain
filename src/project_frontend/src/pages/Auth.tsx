@@ -84,7 +84,7 @@ const Auth: React.FC = () => {
         console.log(result.message);
         console.log(result.user);
         if (result.message === "success") {
-          navigate("/home");
+          navigate("/");
         };
       }
     } catch (error) {

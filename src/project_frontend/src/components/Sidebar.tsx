@@ -45,12 +45,12 @@ const Sidebar: React.FC = () => {
         <FontAwesomeIcon icon={faScroll} />
       </div>
 
+      <Link to="/profile">
       {/*user*/}
-      <a href="">
         <div className="h-10 w-10 flex items-center justify-center rounded-lg cursor-pointer hover:bg-white hover:text-gray-800 hover:duration-300 hover:ease-linear focus:bg-white">
           <FontAwesomeIcon icon={faUser} />
         </div>
-      </a>
+      </Link>
 
       {/*logout*/}
       <div
