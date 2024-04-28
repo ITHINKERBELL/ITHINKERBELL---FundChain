@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Link } from "react-router-dom";
+
 
 const Register_ii: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -87,6 +89,10 @@ const Register_ii: React.FC = () => {
           <label htmlFor="wallet" className="block text-gray-700 font-semibold mb-2">
             Wallet
           </label>
+          <Link to="https://nns.ic0.app/" target="_blank" rel="noopener noreferrer">
+            <div className='bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600 mb-2'> Get wallet address </div>
+          </Link>
+          
           <input
             type="text"
             id="wallet"

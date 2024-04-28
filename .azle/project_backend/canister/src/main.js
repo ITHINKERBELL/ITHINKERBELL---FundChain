@@ -101436,6 +101436,16 @@ var src_default = Canister({
         const user = users_II.get(currentPrincipal);
         return currentPrincipal;
     }),
+    userChecker: query([
+        Principal3
+    ], text, ()=>{
+        let currentPrincipal = ic.caller();
+        if (!users_II.containsKey(currentPrincipal)) {
+            return "unregistered";
+        }
+        const user = users_II.get(currentPrincipal);
+        return "registered";
+    }),
     getAllUsers_II: query([], Vec2(User_II), ()=>{
         return users_II.values();
     }),

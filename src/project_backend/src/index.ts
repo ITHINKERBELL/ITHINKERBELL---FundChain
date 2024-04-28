@@ -207,6 +207,21 @@ export default Canister({
 
     }),
 
+    userChecker: query([Principal], text, () => {
+        let currentPrincipal = ic.caller();
+   
+            // If user does not exist, return error.
+            if (!users_II.containsKey(currentPrincipal)) {
+                return "unregistered";
+            }
+   
+            // Return the current user.
+            const user = users_II.get(currentPrincipal);
+            // return JSON.stringify(user); // Assuming you want to return the user as a JSON string
+            return "registered";
+
+    }),
+
     getAllUsers_II: query([], Vec(User_II), () => {
         return users_II.values()
     }),

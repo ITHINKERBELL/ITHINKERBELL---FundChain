@@ -8,6 +8,7 @@ service: () -> {
     getMe: () -> (principal) query;
     getUserByEmail: (text) -> (text) query;
     greet: (text) -> (text) query;
+    userChecker: (principal) -> (text) query;
     userLogin: (text, text) -> (text);
     userRegistration: (text, text, text, text, text, text, text, text) -> (text);
     user_II_Login: (principal) -> (text);

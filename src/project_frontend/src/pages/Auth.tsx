@@ -56,7 +56,6 @@ const Auth: React.FC = () => {
       },
     });
       setActor(newActor);
-      console.log(actor);
 
       const principal = await newActor.getMe();
       console.log("login button, testing if it will get the right principal --> " + principal.toString());
@@ -73,6 +72,7 @@ const Auth: React.FC = () => {
       if (res === "User doesn't exist.") {
         console.log("User doesn't exist. Register first.");
         // TODO: navigate to the register page
+        navigate("/register");
       } else {
         const result = JSON.parse(res);
         console.log(result.message);
@@ -86,6 +86,22 @@ const Auth: React.FC = () => {
     }
   };
   
+  const userChecker = async (principal: Principal) => {
+    try {
+      // calls the login function in the backend and pass the principal of the identity 
+      const res = await actor.userChecker(principal);
+      if (res === "unregistered") {
+        console.log("User doesn't exist. Register first.");
+        // TODO: navigate to the register page
+        navigate("/register");
+      } else if (res === "registered") {
+        console.log("Sorry, this internet identity is already registered. Please try logging in with your existing account.");
+        navigate("/auth");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handleRegister = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -115,47 +131,13 @@ const Auth: React.FC = () => {
       },
     });
       setActor(newActor);
-      console.log(actor);
+
+      const principal = await newActor.getMe();
+      console.log("register button, testing if it will get the right principal --> " + principal.toString());
+      userChecker(principal);
     } catch (error) {
       console.error("Error logging in:", error);
     }
-  };
-
-  /// register
-  const [formData, setFormData] = useState({
-    email: '',
-    username: '',
-    userType: '',
-    wallet: '',
-    firstName: '',
-    middleName: '',
-    lastName: '',
-    birthday: '',
-  });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // Here you can add your logic for form submission
-    console.log(formData);
-    // Reset form after submission
-    setFormData({
-      email: '',
-      username: '',
-      userType: '',
-      wallet: '',
-      firstName: '',
-      middleName: '',
-      lastName: '',
-      birthday: '',
-    });
   };
 
   return (
@@ -194,129 +176,6 @@ const Auth: React.FC = () => {
         </button>
       </form>
       <section id="principal" className="mt-4"></section>
-
-      <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-md shadow-md">
-      <h2 className="text-2xl font-semibold mb-4">Register</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label htmlFor="email" className="block text-gray-700 font-semibold mb-2">
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="username" className="block text-gray-700 font-semibold mb-2">
-            Username
-          </label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="userType" className="block text-gray-700 font-semibold mb-2">
-            User Type
-          </label>
-          <input
-            type="text"
-            id="userType"
-            name="userType"
-            value={formData.userType}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="wallet" className="block text-gray-700 font-semibold mb-2">
-            Wallet
-          </label>
-          <input
-            type="text"
-            id="wallet"
-            name="wallet"
-            value={formData.wallet}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="firstName" className="block text-gray-700 font-semibold mb-2">
-            First Name
-          </label>
-          <input
-            type="text"
-            id="firstName"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="middleName" className="block text-gray-700 font-semibold mb-2">
-            Middle Name
-          </label>
-          <input
-            type="text"
-            id="middleName"
-            name="middleName"
-            value={formData.middleName}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="lastName" className="block text-gray-700 font-semibold mb-2">
-            Last Name
-          </label>
-          <input
-            type="text"
-            id="lastName"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="birthday" className="block text-gray-700 font-semibold mb-2">
-            Birthday
-          </label>
-          <input
-            type="date"
-            id="birthday"
-            name="birthday"
-            value={formData.birthday}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
-            required
-          />
-        </div>
-        <button
-          type="submit"
-          className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
-        >
-          Register
-        </button>
-      </form>
-    </div>
     </main>
   );
 };
