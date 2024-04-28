@@ -45,11 +45,7 @@ const Auth: React.FC = () => {
         });
       });
       const identity = authClient.getIdentity();
-      console.log(identity);
-
       const canisterId = process.env.CANISTER_ID_PROJECT_BACKEND;
-
-      console.log(canisterId);
 
     if (!canisterId) {
       throw new Error('CANISTER_ID_II_INTEGRATION_BACKEND is not set');
@@ -107,13 +103,7 @@ const Auth: React.FC = () => {
         });
       });
       const identity = authClient.getIdentity();
-      console.log(identity);
-
-      const principal = await actor.getMe();
-      console.log(principal);
-
       const canisterId = process.env.CANISTER_ID_PROJECT_BACKEND;
-
       console.log(canisterId);
 
     if (!canisterId) {
@@ -170,7 +160,7 @@ const Auth: React.FC = () => {
 
   return (
     <main>
-      <img src="logo2.svg" alt="DFINITY logo" />
+      {/* <img src="logo2.svg" alt="DFINITY logo" /> */}
       <br />
       <br />
       <form>
@@ -190,7 +180,7 @@ const Auth: React.FC = () => {
         >
           Register
         </button>
-        <p className="text-sm text-gray-600">Using your internet identity</p>
+        <p className="text-sm text-gray-600">Using your <b>Internet Identity</b></p>
       </div>
       </form>
       <br />
