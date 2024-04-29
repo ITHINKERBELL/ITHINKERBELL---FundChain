@@ -10,20 +10,6 @@ import Register_ii from "./Register_ii";
 import Profile from "./Profile";
 
 function MainContent() {
-  // <ToastContainer
-  //     position="top-right"
-  //     autoClose={5000}
-  //     hideProgressBar={false}
-  //     newestOnTop={false}
-  //     closeOnClick
-  //     rtl={false}
-  //     pauseOnFocusLoss
-  //     draggable
-  //     pauseOnHover
-  //     theme="light"
-  // />
-  // {/* Same as */ }
-  // <ToastContainer />
 
   return (
     <div className="relative bg-gray-100 min-h-screen flex flex-row">

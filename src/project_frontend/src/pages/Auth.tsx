@@ -75,7 +75,9 @@ const Auth: React.FC = () => {
   const login = async (principal: Principal) => {
     try {
       // calls the login function in the backend and pass the principal of the identity 
+      console.log("login --> " + principal.toString());
       const res = await actor.user_II_Login(principal);
+      console.log(res);
       if (res === "User doesn't exist.") {
         console.log("User doesn't exist. Register first.");
         navigate("/register");
