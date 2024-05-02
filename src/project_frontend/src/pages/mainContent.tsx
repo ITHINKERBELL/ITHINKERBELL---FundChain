@@ -4,7 +4,6 @@ import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import Home from "./home";
 import CampaignDetails from "./CampaignDetails";
-import { ToastContainer } from "react-toastify";
 import Auth from "./Auth";
 import Register_ii from "./Register_ii";
 import Profile from "./Profile";

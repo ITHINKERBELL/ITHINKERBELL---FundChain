@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
-
 import DisplayCampaigns from "../components/DisplayCampaigns";
-import { useStateContext } from "../context/index";
 import { project_backend } from "../../../declarations/project_backend";
 
 const Home = () => {
@@ -25,11 +23,14 @@ const Home = () => {
   }, []);
 
   return (
-    <DisplayCampaigns
+    <div>
+      <DisplayCampaigns
       title="All Campaigns"
       isLoading={isLoading}
       campaigns={campaigns}
     />
+    </div>
+
   );
 };
 
