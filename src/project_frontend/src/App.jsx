@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import MainContent from "./pages/mainContent";
 import { authenticateToken } from "./services/authentication";
-import { ActorProvider } from "./context/ActorContext"; 
+import { ActorProvider } from "./context/ActorContext";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -15,7 +15,7 @@ function App() {
   }, []);
 
   return (
-    <ActorProvider> 
+    <ActorProvider>
       {isLoggedIn ? <MainContent /> : <MainContent />}
     </ActorProvider>
   );

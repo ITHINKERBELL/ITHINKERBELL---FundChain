@@ -1,13 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
 import FundCard from "./FundCard";
 import { loader } from "../assets/index";
 
 interface DisplayCampaignsProps {
   title: string;
   isLoading: boolean;
-  campaigns: any;
+  campaigns: any[];
 }
 
 const DisplayCampaigns = ({
@@ -44,9 +43,9 @@ const DisplayCampaigns = ({
 
         {!isLoading &&
           campaigns.length > 0 &&
-          campaigns.map((campaign: any) => (
+          campaigns.map((campaign: any, index: number) => (
             <FundCard
-              key={uuidv4()}
+              key={campaign.id} // Assuming campaign.id exists and is unique
               {...campaign}
               handleClick={() => handleNavigate(campaign)}
             />
