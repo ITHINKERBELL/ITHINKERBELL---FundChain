@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import PlugConnect from "./PlugConnect";
+// import PlugConnect from "./PlugConnect";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass, faLink } from "@fortawesome/free-solid-svg-icons";
 import SearchBar from "./Searchbar";
@@ -34,11 +34,7 @@ const Navbar: React.FC = () => {
       <div className="flex-grow"></div>
 
       <div className="flex">
-        <PlugConnect 
-          dark={true} 
-          title="Connect to Plug" 
-          onConnectCallback={handleConnect} 
-        />
+        <w3m-button />
       </div>
     </header>
   );

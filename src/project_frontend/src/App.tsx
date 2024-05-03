@@ -6,13 +6,13 @@ import { ActorProvider } from "./context/ActorContext";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const a = await authenticateToken();
-      setIsLoggedIn(a);
-    };
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const a = await authenticateToken();
+  //     setIsLoggedIn(a);
+  //   };
+  //   fetchData();
+  // }, []);
 
   return (
     <ActorProvider>
