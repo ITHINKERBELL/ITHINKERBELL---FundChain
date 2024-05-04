@@ -38,32 +38,7 @@ const CreateCampaign: React.FC = () => {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    const form = event.currentTarget;
-
-    const businessOwnerInput = form.elements.namedItem(
-      "businessOwner"
-    ) as HTMLInputElement;
-    const businessNameInput = form.elements.namedItem(
-      "businessName"
-    ) as HTMLInputElement;
-    const descriptionInput = form.elements.namedItem(
-      "story"
-    ) as HTMLInputElement;
-    const targetInput = form.elements.namedItem("target") as HTMLInputElement;
-    const deadlineInput = form.elements.namedItem(
-      "deadline"
-    ) as HTMLInputElement;
-    const imageInput = form.elements.namedItem("image") as HTMLInputElement;
-
-    const businessOwnerValue = businessOwnerInput.value;
-    const businessNameValue = businessNameInput.value;
-    const descriptionValue = descriptionInput.value;
-    const targetValue = targetInput.value;
-    const deadlineValue = deadlineInput.value;
-    const imageValue = imageInput.value;
-
-    const deadlineTimestamp = Date.parse(deadlineValue);
+    const deadlineTimestamp = Date.parse(form.deadline);
 
     // TODO: add more validations
     if (deadlineTimestamp <= Date.now()) {
@@ -73,12 +48,12 @@ const CreateCampaign: React.FC = () => {
 
     project_backend
       .createACampaign(
-        businessOwnerValue,
-        businessNameValue,
-        descriptionValue,
-        targetValue,
-        deadlineValue,
-        imageValue
+        form.businessOwner,
+        form.businessName,
+        form.description,
+        form.target,
+        form.deadline,
+        form.image
       )
       .then((res) => {
         console.log(res);
@@ -167,7 +142,7 @@ const CreateCampaign: React.FC = () => {
             btnType="submit"
             title="Submit new campaign"
             styles="bg-[#1f1e1c]"
-            handleClick={() => {}}
+            handleClick={() => { }}
           />
         </div>
       </form>
