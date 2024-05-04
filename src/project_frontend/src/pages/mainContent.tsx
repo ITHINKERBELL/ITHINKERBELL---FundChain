@@ -25,7 +25,7 @@ function MainContent() {
       }
     };
     fetchData();
-  }, [])
+  }, [isConnected, address])
   // TODO: Create a loading page before uncommenting this 
   // if (isConnected && usertype === null) return <><Loading /></>
   if (isConnected && usertype === "user") return <><UserPage /></>
