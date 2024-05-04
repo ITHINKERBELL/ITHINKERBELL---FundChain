@@ -25,7 +25,7 @@ const Profile = () => {
         <h1 className="py-8 text-4xl font-medium text-[#2d2d2d] py-2">
           {userData && `Hello, ${userData.name.firstName}!`}
         </h1>
-        <div className="border-[#1f1e1c] w-1200 h-700 flex flex-col rounded-[5px] sm:p-5 p-2 bg-white shadow-sm">
+        <div className="border-[#1f1e1c] w-1200 flex items-start flex-col rounded-tr-lg rounded-br-lg p-10 bg-white shadow-md">
           {userData && (
             <>
               <h1 className='text-xs text-[#2d2d2d] my-2'>
@@ -45,7 +45,7 @@ const Profile = () => {
         </div>
       </div>
       <div className="mt-4">
-        <div className="border-[#1f1e1c] w-1200 h-300 flex text-align-left flex-col rounded-[5px] sm:p-5 bg-white shadow-sm">
+        <div className="border-[#1f1e1c] w-1200 flex items-start flex-col rounded-tr-lg rounded-br-lg p-10 bg-white shadow-md">
           <h1 className='text-xs text-[#2d2d2d] my-2'>
             <b>Transaction History</b>
           </h1>

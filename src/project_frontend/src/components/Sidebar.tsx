@@ -10,7 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { useActor } from "../context/ActorContext";
-import logo from "../../public/logo2.svg";
+import logo from "../../public/fundchain_logo.png";
 
 const Sidebar: React.FC = () => {
 

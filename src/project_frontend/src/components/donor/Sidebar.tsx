@@ -10,7 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { useActor } from "../../context/ActorContext";
-import logo from "../../../public/logo2.svg";
+import logo from "../../../public/fundchain_logo.png";
 import { useDisconnect } from "wagmi";
 
 const Sidebar: React.FC = () => {
@@ -24,7 +24,7 @@ const Sidebar: React.FC = () => {
 
   return (
     <aside className="w-50 h-screen flex flex-col justify-start fixed top-0 left-0 bg-[#FFFFFF] text-white">
-      <div className="flex items-center justify-center h-14 w-14 rounded-full mb-10 bg-[#E4E4E4] m-6">
+      <div className="flex items-center justify-center self-center h-14 w-14 rounded-full mb-10 m-6">
         <img src={logo} alt="logo" />
       </div>
 
