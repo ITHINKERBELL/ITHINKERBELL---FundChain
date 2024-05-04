@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import DisplayCampaigns from "../components/DisplayCampaigns";
 import { project_backend } from "../../../declarations/project_backend";
+import SearchBar from "../components/Searchbar";
 
 const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -24,6 +25,10 @@ const Home = () => {
 
   return (
     <div>
+      <div className="mt-10 mb-10">
+        <SearchBar />
+      </div>
+
       <DisplayCampaigns
       title="All Campaigns"
       isLoading={isLoading}

@@ -16,8 +16,8 @@ function MainContent() {
         <Sidebar />
       </div>
 
-      <div className="flex-1 max-sm:w-full max-w-[1280px] mx-auto sm:pl-56">
-        <Navbar />
+      <div className="flex-1 max-sm:w-full max-w-[1280px] mx-auto sm:pl-40">
+        {/* <Navbar /> */}
         <div className="pl-5">
           <Routes>
             <Route path="/" element={<Home />} />
