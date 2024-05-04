@@ -7,8 +7,11 @@ import { useStateContext } from "../context";
 import { profile } from "../assets";
 import { daysLeft } from "../utils";
 import { calculateBarPercentage } from "../utils";
+import { useSendTransaction } from 'wagmi'
+import { parseEther } from 'viem'
 
 const CampaignDetails: React.FC = () => {
+  const { data: hash, sendTransaction, isPending } = useSendTransaction()
   const { state } = useLocation();
   const navigate = useNavigate();
   // const { donate, getDonations, contract, address } = useStateContext();
@@ -32,10 +35,11 @@ const CampaignDetails: React.FC = () => {
 
   const handleDonate = async () => {
     setIsLoading(true);
-
+    sendTransaction({
+      to: '0xA6084f2EE86B1F6D69D12A847971Cb2055ad058E',
+      value: parseEther(amount),
+    });
     // await donate(state.pId, amount);
-
-    navigate("/");
     setIsLoading(false);
   };
 
@@ -170,13 +174,17 @@ const CampaignDetails: React.FC = () => {
                 </p>
               </div>
 
-              <CustomButton
-                btnType="button"
-                title="Fund Campaign"
-                styles="w-full bg-[#8c6dfd]"
-                handleClick={handleDonate}
-              />
+              <button 
+                disabled={isPending} 
+                type="button"
+                className="font-epilogue font-semibold text-[16px] leading-[26px] text-white hover:bg-[#3b3a3a] min-h-[52px] px-4 rounded-[10px] w-full bg-[#8c6dfd] transition-all duration-300 ease-in-out"
+                onClick={handleDonate}
+              >
+                {isPending ? 'Confirming...' : 'Fund Business'} 
+              </button>
+              {hash && <div>Transaction Hash: {hash}</div>} 
             </div>
+            
           </div>
         </div>
       </div>
