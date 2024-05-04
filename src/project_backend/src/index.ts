@@ -23,7 +23,8 @@ export let users = StableBTreeMap<text, User>(4)
 const Campaigns = Record({
     campaignId: text,
     title: text,
-    owner: text,
+    ownerName: text,
+    ownerWallet: text,
     description: text,
     target: text,
     deadline: text,
@@ -74,6 +75,14 @@ export default Canister({
             return "User not found";
         }
     }),
+    getUsernameByWalletAddress: query([text], text, (wallet) => {
+        let foundUser = users.get(wallet);
+        if (foundUser && foundUser.Some) {
+            return foundUser.Some.username;
+        } else {
+            return "User not found";
+        }
+    }),
     getAllUsers: query([], Vec(User), () => {
         return users.values()
     }),
@@ -92,8 +101,8 @@ export default Canister({
         }
         return JSON.stringify(foundUser);
     }),
-    createACampaign: update([text, text, text, text, text, text], Campaigns, async (_owner: string, _title: string, _description: string, _target: text, _deadline: text, _image: string) => {
-        const deadlineTimestamp = Date.parse(_deadline);
+    createACampaign: update([text, text, text, text, text, text, text], Campaigns, async (ownerName, ownerWallet, title, description, target, deadline, image) => {
+        const deadlineTimestamp = Date.parse(deadline);
         if (isNaN(deadlineTimestamp)) {
             throw new Error("Invalid deadline format");
         }
@@ -106,13 +115,14 @@ export default Canister({
 
         const newCampaign: Campaigns = {
             campaignId: campaignId,
-            title: _title,
-            owner: _owner,
-            description: _description,
-            target: _target,
-            deadline: _deadline,
+            title,
+            ownerName,
+            ownerWallet,
+            description,
+            target,
+            deadline,
             amountCollected: BigInt(0),
-            image: _image,
+            image,
             donators: [],
             donations: []
         };
