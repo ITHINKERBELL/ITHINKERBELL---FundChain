@@ -9,9 +9,9 @@ import { useActor } from "../context/ActorContext";
 import { Principal } from '@dfinity/principal';
 
 
-// TODO: connect the form to user_II_Registration function in our backend
+// TODO: connect the form to userRegistration function in our backend
 
-const Register_ii: React.FC = () => {
+const Register: React.FC = () => {
   // const [actor, setActor] = useState(project_backend);
   const { actor } = useActor();
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ const Register_ii: React.FC = () => {
     birthday: '',
   });
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(actor);
     getMe();
   }, []);
@@ -83,7 +83,7 @@ const Register_ii: React.FC = () => {
     const birthdayValue = birthdayInput.value;
 
     project_backend
-      .user_II_Registration(
+      .userRegistration(
         principal,
         emailValue,
         usernameValue,
@@ -159,7 +159,7 @@ const Register_ii: React.FC = () => {
           <Link to="https://nns.ic0.app/" target="_blank" rel="noopener noreferrer">
             <div className='bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600 mb-2'> Get wallet address </div>
           </Link>
-          
+
           <input
             type="text"
             id="wallet"
@@ -236,4 +236,4 @@ const Register_ii: React.FC = () => {
   );
 };
 
-export default Register_ii;
+export default Register;
