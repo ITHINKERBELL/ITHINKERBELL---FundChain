@@ -100835,7 +100835,8 @@ var users = StableBTreeMap(4);
 var Campaigns = Record2({
     campaignId: text,
     title: text,
-    owner: text,
+    ownerName: text,
+    ownerWallet: text,
     description: text,
     target: text,
     deadline: text,
@@ -100845,7 +100846,7 @@ var Campaigns = Record2({
     donations: Vec2(int)
 });
 var CampaignId = text;
-var campaigns = StableBTreeMap(3);
+var campaigns = StableBTreeMap(5);
 var src_default = Canister({
     greet: query([
         text
@@ -100891,6 +100892,16 @@ var src_default = Canister({
             return "User not found";
         }
     }),
+    getUsernameByWalletAddress: query([
+        text
+    ], text, (wallet)=>{
+        let foundUser = users.get(wallet);
+        if (foundUser && foundUser.Some) {
+            return foundUser.Some.username;
+        } else {
+            return "User not found";
+        }
+    }),
     getUserDetailsByWalletAddress: query([
         text
     ], text, (wallet)=>{
@@ -100927,9 +100938,10 @@ var src_default = Canister({
         text,
         text,
         text,
+        text,
         text
-    ], Campaigns, async (_owner, _title, _description, _target, _deadline, _image)=>{
-        const deadlineTimestamp = Date.parse(_deadline);
+    ], Campaigns, async (ownerName, ownerWallet, title, description, target, deadline, image)=>{
+        const deadlineTimestamp = Date.parse(deadline);
         if (isNaN(deadlineTimestamp)) {
             throw new Error("Invalid deadline format");
         }
@@ -100939,13 +100951,14 @@ var src_default = Canister({
         let campaignId = v4_default();
         const newCampaign = {
             campaignId,
-            title: _title,
-            owner: _owner,
-            description: _description,
-            target: _target,
-            deadline: _deadline,
+            title,
+            ownerName,
+            ownerWallet,
+            description,
+            target,
+            deadline,
             amountCollected: BigInt(0),
-            image: _image,
+            image,
             donators: [],
             donations: []
         };

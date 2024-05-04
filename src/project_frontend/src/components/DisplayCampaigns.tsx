@@ -23,7 +23,7 @@ const DisplayCampaigns = ({
 
   return (
     <div>
-      <h1 className="font-epilogue font-semibold text-[18px] text-gray text-left">
+      <h1 className="font-epilogue font-semibold text-[18px] text-gray-700 text-left">
         {title} ({campaigns.length})
       </h1>
 
