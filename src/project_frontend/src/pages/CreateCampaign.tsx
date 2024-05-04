@@ -89,80 +89,87 @@ const CreateCampaign: React.FC = () => {
   };
 
   return (
-    <div className="border-[#1f1e1c] flex justify-center items-center flex-col rounded-[10px] sm:p-10 p-4 bg-white">
+    <div className="border-[#1f1e1c] flex justify-center items-start flex-col rounded-tr-lg rounded-br-lg p-10 m-5 bg-white shadow-md">
       {isLoading && <Loader />}
-      <div className="flex justify-center items-center p-[16px] sm:min-w-[380px] bg-gray-100 rounded-lg">
-        <h1 className="font-epilogue font-bold sm:text-[25px] text-[18px] leading-[38px] text-gray-800">
-          Start a Campaign
-        </h1>
-      </div>
-
-      <form
-        onSubmit={handleSubmit}
-        className="w-full mt-[65px] flex flex-col gap-[30px]"
-      >
-        <div className="flex flex-wrap gap-[40px]">
-          <FormField
-            id="businessOwner"
-            labelName="Your Name *"
-            disable={true}
-            placeholder="Juan Marie Delos Santos"
-            inputType="text"
-            value={form.businessOwner}
-            handleChange={(e) => handleFormFieldChange("businessOwner", e)}
-          />
-          <FormField
-            id="businessName"
-            labelName="Business Name *"
-            placeholder="Write your business name"
-            inputType="text"
-            value={form.businessName}
-            handleChange={(e) => handleFormFieldChange("businessName", e)}
-          />
+      <h1 className="font-epilogue font-semibold text-[30px] text-gray-400">
+        Tell us more <br /> about <span className="text-[45px] text-gray-700">your business..</span>
+      </h1>
+      <div className="m-5" />
+      <form onSubmit={handleSubmit} className="w-full flex flex-col gap-[20px]">
+        <div className="flex sm:flex-row gap-[60px]">
+          <div className="flex flex-col gap-[10px]">
+            <FormField
+              id="businessOwner"
+              labelName="Your Name *"
+              disable={true}
+              placeholder="Juan Marie Delos Santos"
+              inputType="text"
+              value={form.businessOwner}
+              handleChange={(e) => handleFormFieldChange("businessOwner", e)}
+              inputStyle={{ width: "450px", height: "50px" }}
+              textareaStyle={{ width: "450px", height: "50px" }}
+            />
+            <FormField
+              id="businessName"
+              labelName="Business Name *"
+              placeholder="Write your business name"
+              inputType="text"
+              value={form.businessName}
+              handleChange={(e) => handleFormFieldChange("businessName", e)}
+              inputStyle={{ width: "450px", height: "50px" }}
+              textareaStyle={{ width: "450px", height: "50px" }}
+            />
+            <FormField
+              id="image"
+              labelName="Campaign image *"
+              placeholder="Place image URL of your campaign"
+              inputType="url"
+              value={form.image}
+              handleChange={(e) => handleFormFieldChange("image", e)}
+              inputStyle={{ width: "450px", height: "50px" }}
+              textareaStyle={{ width: "450px", height: "50px" }}
+            />
+            <FormField
+              id="target"
+              labelName="Goal *"
+              placeholder="ETH 2.50"
+              inputType="text"
+              value={form.target}
+              handleChange={(e) => handleFormFieldChange("target", e)}
+              inputStyle={{ width: "450px", height: "50px" }}
+              textareaStyle={{ width: "450px", height: "50px" }}
+            />
+            <FormField
+              id="deadline"
+              labelName="End Date *"
+              placeholder="End Date"
+              inputType="date"
+              value={form.deadline}
+              handleChange={(e) => handleFormFieldChange("deadline", e)}
+              inputStyle={{ width: "450px", height: "50px" }}
+              textareaStyle={{ width: "450px", height: "50px" }}
+            />
+          </div>
+          <div className="flex flex-col gap-[40px]">
+            <div className="flex flex-row gap-[40px]">
+              <FormField
+                id="story"
+                labelName="Business Story *"
+                placeholder="Write your story"
+                isTextArea
+                inputType=""
+                value={form.description}
+                handleChange={(e) => handleFormFieldChange("description", e)}
+                inputStyle={{ width: "450px", height: "440px" }}
+                textareaStyle={{ width: "450px", height: "440px" }}
+              />
+            </div>
+          </div>
         </div>
-
-        <FormField
-          id="image"
-          labelName="Campaign image *"
-          placeholder="Place image URL of your campaign"
-          inputType="url"
-          value={form.image}
-          handleChange={(e) => handleFormFieldChange("image", e)}
-        />
-
-        <FormField
-          id="story"
-          labelName="Story *"
-          placeholder="Write your story"
-          isTextArea
-          inputType=""
-          value={form.description}
-          handleChange={(e) => handleFormFieldChange("description", e)}
-        />
-
-        <div className="flex flex-wrap gap-[40px]">
-          <FormField
-            id="target"
-            labelName="Goal *"
-            placeholder="ETH 2.50"
-            inputType="text"
-            value={form.target}
-            handleChange={(e) => handleFormFieldChange("target", e)}
-          />
-          <FormField
-            id="deadline"
-            labelName="End Date *"
-            placeholder="End Date"
-            inputType="date"
-            value={form.deadline}
-            handleChange={(e) => handleFormFieldChange("deadline", e)}
-          />
-        </div>
-
         <div className="flex justify-center items-center mt-[40px]">
           <CustomButton
             btnType="submit"
-            title="Submit new campaign"
+            title="Submit your business"
             styles="bg-[#1f1e1c]"
             handleClick={() => { }}
           />
