@@ -23,6 +23,7 @@ const FormField: React.FC<FormFieldProps> = ({
   handleChange,
   inputStyle,
   textareaStyle,
+  disable = false
 }) => {
   const fixedInputStyle: CSSProperties = {
     backgroundColor: "#FAFAFA",
