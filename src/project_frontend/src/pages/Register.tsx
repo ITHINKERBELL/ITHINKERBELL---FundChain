@@ -13,7 +13,7 @@ const Register: React.FC = () => {
     wallet: address,
     email: '',
     username: '',
-    userType: '',
+    userType: 'donor',
     firstName: '',
     lastName: '',
     middleName: '',
@@ -93,15 +93,26 @@ const Register: React.FC = () => {
           <label htmlFor="userType" className="block text-gray-700 font-semibold mb-2">
             User Type
           </label>
-          <input
-            type="text"
-            id="userType"
-            name="userType"
-            value={formData.userType}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
-            required
-          />
+          <div>
+            <input
+              type="radio"
+              name="userType"
+              value="donor"
+              checked={formData.userType === "donor"}
+              onChange={handleChange}
+            />
+            <label htmlFor="Donor">Donor</label>
+          </div>
+          <div>
+            <input
+              type="radio"
+              name="userType"
+              value="user"
+              checked={formData.userType === "user"}
+              onChange={handleChange}
+            />
+            <label htmlFor="Trustee">Trustee</label>
+          </div>
         </div>
         <div className="mb-4">
           <label htmlFor="firstName" className="block text-gray-700 font-semibold mb-2">
