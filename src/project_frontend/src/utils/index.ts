@@ -9,7 +9,6 @@ export const daysLeft = (deadline: any) => {
     const collectedAmount = Number(raisedAmount);
     const percentage = Math.round((collectedAmount * 100) / goal);
   
-    console.log(percentage);
     return percentage;
   };
   

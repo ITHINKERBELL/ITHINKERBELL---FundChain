@@ -25,8 +25,9 @@ const Home = () => {
 
   return (
     <div>
-      <div className="mt-10 mb-10">
-        <SearchBar /> <w3m-button />
+      <div className="mt-10 mb-10 flex flex-row items-center justify-between">
+        <SearchBar /> 
+        <w3m-button />
       </div>
 
       <DisplayCampaigns
