@@ -26,16 +26,15 @@ const Home = () => {
   return (
     <div>
       <div className="mt-10 mb-10">
-        <SearchBar />
+        <SearchBar /> <w3m-button />
       </div>
 
       <DisplayCampaigns
-      title="All Campaigns"
-      isLoading={isLoading}
-      campaigns={campaigns}
-    />
+        title="All Campaigns"
+        isLoading={isLoading}
+        campaigns={campaigns}
+      />
     </div>
-
   );
 };
 
