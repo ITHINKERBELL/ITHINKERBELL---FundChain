@@ -1,28 +1,25 @@
 import { users } from "../index"
 
-export const checkEveryInputForSignup = async (username: string, email: string, password: string, type: string, dateString: string) => {
+export const checkEveryInputForSignup = async (username: string, email: string, type: string, dateString: string) => {
     if (!checkUsernameValidity(username)) {
-        return { 'message': 'Username must only contains letters and numbers.', "httpCode": 400};
+        return { 'message': 'Username must only contains letters and numbers.', "httpCode": 400 };
     }
     if (!checkEmailValidity(email)) {
-        return { 'message': 'Invalid email address.', "httpCode": 400};
-    }
-    if (!checkPasswordValidity(password)) {
-        return { 'message': 'Password must have at least one lowercase letter, one uppercase letter, one numeric digit, and one special character.', "httpCode": 400};
+        return { 'message': 'Invalid email address.', "httpCode": 400 };
     }
     if (!(await checkUsernameAvailability(username))) {
-        return{ 'message': 'Username is being used.', "httpCode": 400};
+        return { 'message': 'Username is being used.', "httpCode": 400 };
     }
     if (!(await checkEmailAvailability(email))) {
-        return { 'message': 'Email address is being used.', "httpCode": 400};
+        return { 'message': 'Email address is being used.', "httpCode": 400 };
     }
     if (!(await checkUserTypeValidity(type))) {
-        return{ 'message': 'Invalid user type.', "httpCode": 400};
+        return { 'message': 'Invalid user type.', "httpCode": 400 };
     }
     if (!(await checkDateValidity(dateString))) {
-        return { 'message': 'Invalid entered date.', "httpCode": 400};
+        return { 'message': 'Invalid entered date.', "httpCode": 400 };
     }
-    return { 'message': 'success', "httpCode": 200};
+    return { 'message': 'success', "httpCode": 200 };
 };
 
 // Check if username is safe to use
@@ -38,19 +35,12 @@ export const checkEmailValidity = (emailAddress: string) => {
     return regex.test(emailAddress);
 };
 
-// Check if password is safe to use
-const checkPasswordValidity = (password: string) => {
-    const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s)./;
-    // Regex is used to check for the presence of at least one lowercase letter, one uppercase letter, one numeric digit, and one special character.
-    return regex.test(password);
-};
-
 // Check if the username is already in use within the canister
 const checkUsernameAvailability = async (username: string): Promise<boolean> => {
-    const values = users.values(); 
+    const values = users.values();
     for (const user of values) {
         if (user.username.toLowerCase() === username.toLowerCase()) {
-            return false; 
+            return false;
         }
     }
     return true;
@@ -58,7 +48,7 @@ const checkUsernameAvailability = async (username: string): Promise<boolean> => 
 
 // Check if the email is already in use within the canister
 export const checkEmailAvailability = async (email: string): Promise<boolean> => {
-    const values = users.values(); 
+    const values = users.values();
     for (const user of values) {
         if (user.email.toLowerCase() === email.toLowerCase()) {
             return false;
