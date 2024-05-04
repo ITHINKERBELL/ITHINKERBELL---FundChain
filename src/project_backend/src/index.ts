@@ -74,6 +74,14 @@ export default Canister({
             return "User not found";
         }
     }),
+    getUserDetailsByWalletAddress: query([text], text, (wallet) => {
+        let foundUser = users.get(wallet);
+        if (foundUser && foundUser.Some) {
+            return JSON.stringify(foundUser.Some);
+        } else {
+            return "User not found";
+        }
+    }),
     getAllUsers: query([], Vec(User), () => {
         return users.values()
     }),
