@@ -8,8 +8,11 @@ import FormField from "../components/FormField";
 import Loader from "../components/Loader";
 
 import { project_backend } from "../../../declarations/project_backend";
+import { useAccount } from "wagmi";
 
 const CreateCampaign: React.FC = () => {
+
+  const { address } = useAccount()
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [form, setForm] = useState({
     businessOwner: "",
@@ -20,6 +23,23 @@ const CreateCampaign: React.FC = () => {
     image: "",
   });
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        let username = await project_backend.getUsernameByWalletAddress(`${address}`)
+          .then((res) => {
+            return res
+          })
+          .catch((error) => {
+            return null
+          })
+        setForm({ ...form, businessOwner: `${username}` })
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+  }, [])
   const navigate = useNavigate();
   const [res, setRes] = useState<any>(null);
   const [currentDate, setCurrentDate] = useState<number>(Date.now());
@@ -49,6 +69,7 @@ const CreateCampaign: React.FC = () => {
     project_backend
       .createACampaign(
         form.businessOwner,
+        `${address}`,
         form.businessName,
         form.description,
         form.target,
@@ -84,6 +105,7 @@ const CreateCampaign: React.FC = () => {
           <FormField
             id="businessOwner"
             labelName="Your Name *"
+            disable={true}
             placeholder="Juan Marie Delos Santos"
             inputType="text"
             value={form.businessOwner}

@@ -2,27 +2,27 @@ import { useEffect } from 'react';
 import { tagType, logo } from '../assets/index';
 import { daysLeft } from '../utils/index';
 interface FundCardProps {
-    owner: string;
-    title: string;
-    description: string;
-    target: number;
-    deadline: any;
-    amountCollected: number;
-    image: string;
-    handleClick: () => void;
+  ownerName: string;
+  title: string;
+  description: string;
+  target: number;
+  deadline: any;
+  amountCollected: number;
+  image: string;
+  handleClick: () => void;
 }
 
 
-const FundCard = ({ owner, title, description, target, deadline, amountCollected, image, handleClick }: FundCardProps) => {
+const FundCard = ({ ownerName, title, description, target, deadline, amountCollected, image, handleClick }: FundCardProps) => {
   const remainingDays = daysLeft(deadline);
 
   return (
     <div className="sm:w-[288px] w-full rounded-[15px] bg-[#1c1c24] cursor-pointer" onClick={handleClick}>
-      <img src={image} alt="fund" className="w-full h-[158px] object-cover rounded-[15px]"/>
+      <img src={image} alt="fund" className="w-full h-[158px] object-cover rounded-[15px]" />
 
       <div className="flex flex-col p-4">
         <div className="flex flex-row items-center mb-[18px]">
-          <img src={tagType} alt="tag" className="w-[17px] h-[17px] object-contain"/>
+          <img src={tagType} alt="tag" className="w-[17px] h-[17px] object-contain" />
           <p className="ml-[12px] mt-[2px] font-epilogue font-medium text-[12px] text-[#808191]">Education</p>
         </div>
 
@@ -44,9 +44,9 @@ const FundCard = ({ owner, title, description, target, deadline, amountCollected
 
         <div className="flex items-center mt-[20px] gap-[12px]">
           <div className="w-[30px] h-[30px] rounded-full flex justify-center items-center bg-[#13131a]">
-            <img src={logo} alt="user" className="w-1/2 h-1/2 object-contain"/>
+            <img src={logo} alt="user" className="w-1/2 h-1/2 object-contain" />
           </div>
-          <p className="flex-1 font-epilogue font-normal text-[12px] text-[#808191] truncate">by <span className="text-[#b2b3bd]">{owner}</span></p>
+          <p className="flex-1 font-epilogue font-normal text-[12px] text-[#808191] truncate">by <span className="text-[#b2b3bd]">{ownerName}</span></p>
         </div>
       </div>
     </div>
