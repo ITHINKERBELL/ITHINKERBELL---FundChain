@@ -1,39 +1,58 @@
 import React, { useEffect, useState } from 'react';
 import { useActor } from "../context/ActorContext";
 import { useNavigate } from "react-router-dom";
-
+import { useWalletInfo } from '@web3modal/wagmi/react'
+import { useAccount } from 'wagmi';
+import { project_backend } from "../../../declarations/project_backend";
 
 const Profile = () => {
-  const { actor } = useActor();
-  const navigate = useNavigate();
+  const { address } = useAccount();
+  const [userData, setUserData] = useState<any>(null);
 
-  // const [principal, setPrincipal] = useState<any>(null);
-
-  useEffect(()=>{
-    console.log(actor);
-    getMe();
+  useEffect(() => {
+    getUserDetails();
   }, []);
 
-  const getMe = async () => {
-    const principal_id = await actor.getMe();
-    console.log(principal_id.toString());
-    // setPrincipal(principal_id);
-    const res = await actor.userDetails(principal_id);
-      console.log(res);
-      if (res === "unregistered") {
-        navigate("/");
-      } else if (res.message === "success") {
-        console.log(res);
-        console.log(res.user); // user details
-      }
+  const getUserDetails = async () => {
+    const result = await project_backend.getUserDetailsByWalletAddress(`${address}`);
+    const res = JSON.parse(result);
+    setUserData(res);
   };
 
   return (
-    <div>
-      Profile
-      Transactions
+    <div className="mt-16">
+      <div className="">
+        <h1 className="py-8 text-4xl font-medium text-[#2d2d2d] py-2">
+          {userData && `Hello, ${userData.name.firstName}!`}
+        </h1>
+        <div className="border-[#1f1e1c] w-1200 h-700 flex flex-col rounded-[5px] sm:p-5 p-2 bg-white shadow-sm">
+          {userData && (
+            <>
+              <h1 className='text-xs text-[#2d2d2d] my-2'>
+                <b>Name:</b> {userData.name && `${userData.name.firstName} ${userData.name.lastName}`}
+              </h1>
+              <h1 className='text-xs text-[#2d2d2d] my-2'>
+                <b>Email:</b> {userData.email}
+              </h1>
+              <h1 className='text-xs text-[#2d2d2d] my-2'>
+                <b>User Type:</b> {userData.userType}
+              </h1>
+              <h1 className='text-xs text-[#2d2d2d] my-2'>
+                <b>Birthday:</b> {userData.name && userData.name.birthday}
+              </h1>
+            </>
+          )}
+        </div>
+      </div>
+      <div className="mt-4">
+        <div className="border-[#1f1e1c] w-1200 h-300 flex text-align-left flex-col rounded-[5px] sm:p-5 bg-white shadow-sm">
+          <h1 className='text-xs text-[#2d2d2d] my-2'>
+            <b>Transaction History</b>
+          </h1>
+        </div>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Profile
+export default Profile;
