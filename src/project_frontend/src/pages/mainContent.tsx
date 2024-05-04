@@ -24,8 +24,6 @@ function MainContent() {
         console.error('Error fetching data:', error);
       }
     };
-
-    // Call the async function immediately
     fetchData();
   }, [])
   // TODO: Create a loading page before uncommenting this 

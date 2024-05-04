@@ -11,10 +11,9 @@ function UserPage() {
     <div className="relative bg-gray-100 min-h-screen flex flex-row">
       <div className="hidden sm:flex mr-10">
         <Sidebar />
-      </div>
-      user
-      <div className="flex-1 max-sm:w-full max-w-[1280px] mx-auto sm:pl-40">
-        <div className="pl-5">
+        <div className="flex-1 max-sm:w-full max-w-[1280px] mx-auto sm:pl-40">
+          <div className="pl-5">
+          </div>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/profile" element={<Profile />} />
