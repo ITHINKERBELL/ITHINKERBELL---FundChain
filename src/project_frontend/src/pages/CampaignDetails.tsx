@@ -49,17 +49,16 @@ const CampaignDetails: React.FC = () => {
   //   if (contract) fetchDonators();
   // }, [contract, address]);
 
-  useEffect(() => {
-    console.log(state);
-  });
+  // useEffect(() => {
+  //   console.log(state);
+  // });
 
   const handleDonate = async () => {
     setIsLoading(true);
     sendTransaction({
-      to: '0xA6084f2EE86B1F6D69D12A847971Cb2055ad058E',
+      to: state.ownerWallet,
       value: parseEther(amount),
     });
-    // await donate(state.pId, amount);
     setIsLoading(false);
   };
 
