@@ -42,9 +42,34 @@ const metadata = {
   icons: ['https://avatars.githubusercontent.com/u/37784886']
 }
 
-const chains = [mainnet, arbitrum, polygon, xdc] as const
+const bbtestnet = {
+  id: 17142,
+  name: "beautiful-magneto-aa453d68",
+  network: "bbtestnet",
+  nativeCurrency: {
+    decimals: 18,
+    name: "Native Token",
+    symbol: "Native Token",
+  },
+  rpcUrls: {
+    public: { http: ["https://rpc.buildbear.io/beautiful-magneto-aa453d68"] },
+    default: { http: ["https://rpc.buildbear.io/beautiful-magneto-aa453d68"] },
+  },
+  blockExplorers: {
+    etherscan: {
+      name: "BBExplorer",
+      url: "https://explorer.buildbear.io/beautiful-magneto-aa453d68",
+    },
+    default: {
+      name: "BBExplorer",
+      url: "https://explorer.buildbear.io/beautiful-magneto-aa453d68",
+    },
+  },
+} as const;
+
+const chains = [mainnet, bbtestnet] as const
 const config = defaultWagmiConfig({
-  chains: [mainnet, sepolia],
+  chains: [mainnet, sepolia, bbtestnet], 
   projectId,
   metadata,
   // transports: {
