@@ -27,15 +27,15 @@ export const editUserDonationsHistory = async (wallet: string, campaignId: strin
     try {
         const userOpt: any = users.get(wallet)
         const regUser: User = {
-            wallet: wallet,
+            wallet,
             email: userOpt.Some.email,
             username: userOpt.Some.username,
             userType: userOpt.Some.userType,
             name: {
-                firstName: userOpt.Some.firstName,
-                lastName: userOpt.Some.lastName,
-                middleName: userOpt.Some.middleName,
-                birthday: userOpt.Some.birthday
+                firstName: userOpt.Some.name.firstName,
+                lastName: userOpt.Some.name.lastName,
+                middleName: userOpt.Some.name.middleName,
+                birthday: userOpt.Some.name.birthday
             },
             historyCampaigns: [...userOpt.Some.historyCampaigns, campaignId],
             historyAmount: [...userOpt.Some.historyAmount, amount]
