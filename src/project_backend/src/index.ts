@@ -29,10 +29,10 @@ const Campaigns = Record({
     description: text,
     target: text,
     deadline: text,
-    amountCollected: nat,
+    amountCollected: text,
     image: text,
     donators: Vec(text),
-    donations: Vec(int)
+    donations: Vec(text)
 });
 
 const CampaignId = text;
@@ -40,7 +40,7 @@ type CampaignId = typeof CampaignId.tsType;
 export type Campaigns = typeof Campaigns.tsType;
 
 // new map testing
-let campaigns = StableBTreeMap<CampaignId, Campaigns>(5);
+export let campaigns = StableBTreeMap<CampaignId, Campaigns>(5);
 
 export default Canister({
 
@@ -130,7 +130,7 @@ export default Canister({
             description,
             target,
             deadline,
-            amountCollected: BigInt(0),
+            amountCollected: "0",
             image,
             donators: [],
             donations: []
@@ -152,8 +152,8 @@ export default Canister({
     getCampaignById: query([CampaignId], Opt(Campaigns), (_campaignId: CampaignId) => {
         return campaigns.get(_campaignId);
     }),
-    updateCampaignOnDonation: update([text, text, int32], text, async (campaignId, userWallet, amount) => {
-        return (await editCampaignDonations(campaigns, campaignId, userWallet, amount)) ? "success" : "failed";
+    updateCampaignOnDonation: update([text, text, text], text, async (campaignId, userWallet, amount) => {
+        return (await editCampaignDonations(campaignId, userWallet, amount)) ? "success" : "failed";
     }),
     // getCampaignByTitle: query([CampaignTitle], Opt(Campaigns), (_campaignTitle: CampaignTitle) => {
     //     return campaigns.get(_campaignTitle);
