@@ -5,7 +5,7 @@ import Loader from "../components/Loader";
 import { profile } from "../assets";
 import { daysLeft } from "../utils";
 import { calculateBarPercentage } from "../utils";
-import { useAccount, useSendTransaction } from 'wagmi'
+import { useAccount, useSendTransaction, useTransactionReceipt } from 'wagmi'
 import { parseEther } from 'viem'
 import { project_backend } from "../../../declarations/project_backend";
 
@@ -30,6 +30,7 @@ const CampaignDetails: React.FC = () => {
   // const { donate, getDonations, contract, address } = useStateContext();
   const { address } = useAccount()
   const [usertype, setUsertype] = useState<string | null>(null);
+  const [campaign, setCampaign] = useState<any | null>({});
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -40,12 +41,19 @@ const CampaignDetails: React.FC = () => {
           .catch((error) => {
             return null
           }));
+        setCampaign(await project_backend.getCampaignById(state.campaignId)
+          .then((res) => {
+            return res[0]
+          })
+          .catch((error) => {
+            return null
+          }));
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
     fetchData();
-  }, [address])
+  }, [address, state])
 
 
   const [isLoading, setIsLoading] = useState(false);
@@ -53,10 +61,10 @@ const CampaignDetails: React.FC = () => {
   const [donators, setDonators] = useState<
     { donator: string; donation: number }[]
   >([]);
-  const remainingDays = daysLeft(new Date(state.deadline));
 
+  const remainingDays = daysLeft(new Date(campaign.deadline));
   // const fetchDonators = async () => {
-  //   const data = await getDonations(state.pId);
+  //   const data = await getDonations(campaign.pId);
 
   //   setDonators(data);
   // };
@@ -72,10 +80,10 @@ const CampaignDetails: React.FC = () => {
   const handleDonate = async () => {
     setIsLoading(true);
     sendTransaction({
-      to: state.ownerWallet,
+      to: campaign.ownerWallet,
       value: parseEther(amount),
     });
-    await project_backend.updateCampaignOnDonation(state.campaignId, `${address}`, parseInt(amount))
+    await project_backend.updateCampaignOnDonation(campaign.campaignId, `${address}`, amount)
       .then((res) => {
         return res
       })
@@ -84,16 +92,15 @@ const CampaignDetails: React.FC = () => {
       });
     setIsLoading(false);
   };
-
   return (
     <div className="w-full bg-white shadow-md rounded-tr-lg rounded-br-lg p-10 mt-10 mb-10">
       {isLoading && <Loader />}
 
-      <h3 className="font-epilogue mb-8 font-semibold text-[24px] text-[#414141] text-left leading-[26px] uppercase truncate pl-5">{state.title}</h3>
+      <h3 className="font-epilogue mb-8 font-semibold text-[24px] text-[#414141] text-left leading-[26px] uppercase truncate pl-5">{campaign.title}</h3>
 
       <div className="flex justify-center items-center h-[350px]">
         <img
-          src={state.image}
+          src={campaign.image}
           alt="campaign"
           className="w-[800px] h-[350px] object-cover rounded-sm"
         />
@@ -104,8 +111,8 @@ const CampaignDetails: React.FC = () => {
             className="absolute h-[100px] w-[200px] bg-[#4acd8d]"
             style={{
               width: `${calculateBarPercentage(
-                state.target,
-                state.amountCollected
+                campaign.target,
+                campaign.amountCollected
               )}%`,
               maxWidth: "100%",
             }}
@@ -118,12 +125,12 @@ const CampaignDetails: React.FC = () => {
           </div>
           <div className="mr-4">
             <CountBox
-              title={`Raised of ${state.target}`}
-              value={Number(state.amountCollected)}
+              title={`Raised of ${campaign.target}`}
+              value={Number(campaign.amountCollected)}
             />
           </div>
           <div>
-            <CountBox title="Total Backers" value={donators.length} />
+            <CountBox title="Total Backers" value={campaign.donators ? campaign.donators.length : "0"} />
           </div>
         </div>
       </div>
@@ -146,7 +153,7 @@ const CampaignDetails: React.FC = () => {
               </div>
               <div>
                 <h4 className="font-epilogue font-semibold text-[14px] text-[#414141] break-all">
-                  {state.ownerName}
+                  {campaign.ownerName}
                 </h4>
                 <p className="mt-[4px] font-epilogue font-normal text-[12px] text-[#808191]">
                   10 Campaigns
@@ -162,7 +169,7 @@ const CampaignDetails: React.FC = () => {
 
             <div className="mt-[20px]">
               <p className="font-epilogue font-normal text-[16px] text-[#808191] leading-[26px] text-justify">
-                {state.description}
+                {campaign.description}
               </p>
             </div>
           </div>

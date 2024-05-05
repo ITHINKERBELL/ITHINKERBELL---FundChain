@@ -1,8 +1,8 @@
 import React from "react";
 
 interface CountBoxProps {
-  title: string;
-  value: string | number;
+  title?: string;
+  value?: string | number;
 }
 
 const CountBox: React.FC<CountBoxProps> = ({ title, value }) => {
