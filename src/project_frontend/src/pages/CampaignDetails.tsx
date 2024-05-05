@@ -76,6 +76,19 @@ const CampaignDetails: React.FC = () => {
         />
       </div>
       <div className="w-full flex md:flex-row flex-col justify-center gap-[30px] mt-10"> 
+        {/* <div
+            // className="absolute h-full bg-[#4acd8d]"
+            className="absolute h-[100px] w-[200px] bg-[#4acd8d]"
+            style={{
+              width: `${calculateBarPercentage(
+                state.target,
+                state.amountCollected
+              )}%`,
+              maxWidth: "100%",
+            }}
+          >
+
+        </div> */}
         <div className="flex flex-wrap justify-center mt-4"> 
           <div className="mr-4">
             <CountBox title="Days Left" value={remainingDays} />
