@@ -1,9 +1,11 @@
 import { Canister, query, Record, text, Opt, Vec, int, StableBTreeMap, Principal, update, nat, ic, Result, int32 } from 'azle';
 import { checkEmailValidity, checkEveryInputForSignup } from './util/checkValidation';
 import { v4 as uuid } from 'uuid';
-import { editCampaignDonations } from './util/editData';
+import { editCampaignDonations, editUserDonationsHistory } from './util/editData';
 
 // Define the User record type
+
+type TransactionHistory = typeof User.tsType;
 const User = Record({
     email: text,
     username: text,
@@ -15,7 +17,8 @@ const User = Record({
         middleName: text,
         birthday: text
     }),
-    latestLoginDate: text
+    historyCampaigns: Vec(text),
+    historyAmount: Vec(text),
 })
 
 export type User = typeof User.tsType;
@@ -62,7 +65,8 @@ export default Canister({
                     middleName,
                     birthday
                 },
-                latestLoginDate: JSON.stringify(new Date())
+                historyCampaigns: [],
+                historyAmount: []
             };
             users.insert(regUser.wallet, regUser)
         }
@@ -153,7 +157,7 @@ export default Canister({
         return campaigns.get(_campaignId);
     }),
     updateCampaignOnDonation: update([text, text, text], text, async (campaignId, userWallet, amount) => {
-        return (await editCampaignDonations(campaignId, userWallet, amount)) ? "success" : "failed";
+        return (await editCampaignDonations(campaignId, userWallet, amount) && await editUserDonationsHistory(userWallet, campaignId, amount)) ? "success" : "failed";
     }),
     // getCampaignByTitle: query([CampaignTitle], Opt(Campaigns), (_campaignTitle: CampaignTitle) => {
     //     return campaigns.get(_campaignTitle);
