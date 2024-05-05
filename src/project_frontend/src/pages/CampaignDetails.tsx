@@ -83,15 +83,29 @@ const CampaignDetails: React.FC = () => {
       to: campaign.ownerWallet,
       value: parseEther(amount),
     });
-    await project_backend.updateCampaignOnDonation(campaign.campaignId, `${address}`, amount)
-      .then((res) => {
-        return res
-      })
-      .catch((error) => {
-        return null
-      });
     setIsLoading(false);
   };
+  const result = useTransactionReceipt({
+    hash: hash,
+  });
+  if (result.data) {
+    console.log(result.data);
+    const fetchData = async () => {
+      await project_backend.updateCampaignOnDonation(campaign.campaignId, `${address}`, amount)
+        .then((res) => {
+          console.log(res)
+          return res
+        })
+        .catch((error) => {
+          console.log(error)
+          return null
+        });
+    }
+
+    if (result.data.status === "success") {
+      fetchData()
+    }
+  }
   return (
     <div className="w-full bg-white shadow-md rounded-tr-lg rounded-br-lg p-10 mt-10 mb-10">
       {isLoading && <Loader />}
