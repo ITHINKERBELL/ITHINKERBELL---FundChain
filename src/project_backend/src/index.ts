@@ -1,6 +1,7 @@
-import { Canister, query, Record, text, Opt, Vec, int, StableBTreeMap, Principal, update, nat, ic, Result } from 'azle';
+import { Canister, query, Record, text, Opt, Vec, int, StableBTreeMap, Principal, update, nat, ic, Result, int32 } from 'azle';
 import { checkEmailValidity, checkEveryInputForSignup } from './util/checkValidation';
 import { v4 as uuid } from 'uuid';
+import { editCampaignDonations } from './util/editData';
 
 // Define the User record type
 const User = Record({
@@ -36,7 +37,7 @@ const Campaigns = Record({
 
 const CampaignId = text;
 type CampaignId = typeof CampaignId.tsType;
-type Campaigns = typeof Campaigns.tsType;
+export type Campaigns = typeof Campaigns.tsType;
 
 // new map testing
 let campaigns = StableBTreeMap<CampaignId, Campaigns>(3);
@@ -151,7 +152,9 @@ export default Canister({
     getCampaignById: query([CampaignId], Opt(Campaigns), (_campaignId: CampaignId) => {
         return campaigns.get(_campaignId);
     }),
-
+    updateCampaignOnDonation: update([text, text, int32], text, async (campaignId, userWallet, amount) => {
+        return (await editCampaignDonations(campaigns, campaignId, userWallet, amount)) ? "success" : "failed";
+    }),
     // getCampaignByTitle: query([CampaignTitle], Opt(Campaigns), (_campaignTitle: CampaignTitle) => {
     //     return campaigns.get(_campaignTitle);
     // }),

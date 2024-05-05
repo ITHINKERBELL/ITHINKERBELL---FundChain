@@ -9,13 +9,27 @@ import { useAccount, useSendTransaction } from 'wagmi'
 import { parseEther } from 'viem'
 import { project_backend } from "../../../declarations/project_backend";
 
+interface Campaign {
+  campaignId: string,
+  title: string,
+  ownerName: string,
+  ownerWallet: string,
+  description: string,
+  target: string,
+  deadline: string,
+  amountCollected: number,
+  image: string,
+  donators: [],
+  donations: []
+}
+
 const CampaignDetails: React.FC = () => {
   const { data: hash, sendTransaction, isPending } = useSendTransaction()
   const { state } = useLocation();
   const navigate = useNavigate();
   // const { donate, getDonations, contract, address } = useStateContext();
   const { address } = useAccount()
-  let [usertype, setUsertype] = useState<string | null>(null);
+  const [usertype, setUsertype] = useState<string | null>(null);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -32,6 +46,8 @@ const CampaignDetails: React.FC = () => {
     };
     fetchData();
   }, [address])
+
+
   const [isLoading, setIsLoading] = useState(false);
   const [amount, setAmount] = useState("");
   const [donators, setDonators] = useState<
@@ -51,11 +67,17 @@ const CampaignDetails: React.FC = () => {
 
   const handleDonate = async () => {
     setIsLoading(true);
-    sendTransaction({
-      to: '0xA6084f2EE86B1F6D69D12A847971Cb2055ad058E',
+    console.log(sendTransaction({
+      to: state.ownerWallet,
       value: parseEther(amount),
-    });
-    // await donate(state.pId, amount);
+    }));
+    await project_backend.updateCampaignOnDonation(state.campaignId, `${address}`, parseInt(amount))
+      .then((res) => {
+        return res
+      })
+      .catch((error) => {
+        return null
+      });
     setIsLoading(false);
   };
 
