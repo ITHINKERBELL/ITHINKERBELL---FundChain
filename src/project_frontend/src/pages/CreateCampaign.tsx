@@ -58,6 +58,7 @@ const CreateCampaign: React.FC = () => {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setIsLoading(true);
     const deadlineTimestamp = Date.parse(form.deadline);
 
     // TODO: add more validations
@@ -83,6 +84,9 @@ const CreateCampaign: React.FC = () => {
       })
       .catch((error) => {
         console.error(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
 
     console.log("success");

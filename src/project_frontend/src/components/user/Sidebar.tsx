@@ -29,8 +29,8 @@ const Sidebar: React.FC = () => {
   };
 
   return (
-    <aside className="w-50 h-screen flex flex-col justify-start fixed top-0 left-0 bg-[#FFFFFF] text-white">
-      <div className="flex items-center justify-center h-14 w-14 rounded-full mb-10 bg-[#E4E4E4] m-6">
+    <aside className="w-55 h-screen flex flex-col justify-start fixed top-0 left-0 bg-[#FFFFFF] text-white">
+      <div className="flex items-center justify-center self-center h-14 w-14 rounded-full mb-10 m-6">
         <img src={logo} alt="logo" />
       </div>
 
@@ -41,7 +41,7 @@ const Sidebar: React.FC = () => {
           onClick={() => handleMenuItemClick("/")}
         >
           <FontAwesomeIcon className="ml-2 text-sm" icon={faHouseChimney} />
-          <p className="text-xs ml-4 p-2">Campaigns</p>
+          <p className="text-s ml-4 p-2">Campaigns</p>
         </div>
       </Link>
 
@@ -52,7 +52,7 @@ const Sidebar: React.FC = () => {
           onClick={() => handleMenuItemClick("/create-campaign")}
         >
           <FontAwesomeIcon className="ml-2 text-sm" icon={faSquarePlus} />
-          <p className="text-xs ml-4 p-2">Create Campaigns</p>
+          <p className="text-s ml-4 p-2">Create Campaigns</p>
         </div>
       </Link>
 
@@ -63,7 +63,7 @@ const Sidebar: React.FC = () => {
           onClick={() => handleMenuItemClick("/profile")}
         >
           <FontAwesomeIcon className="ml-2 text-sm" icon={faCircleUser} />
-          <p className="text-xs ml-4 p-2">Profile</p>
+          <p className="text-s ml-4 p-2">Profile</p>
         </div>
       </Link>
 
@@ -73,7 +73,7 @@ const Sidebar: React.FC = () => {
         onClick={() => { disconnect(); navigate("/") }}
       >
         <FontAwesomeIcon className="ml-2 text-sm" icon={faRightFromBracket} />
-        <p className="text-xs ml-4 p-2">Logout</p>
+        <p className="text-s ml-4 p-2">Logout</p>
       </div>
     </aside>
   );

@@ -17,11 +17,14 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.scss';
 import { BrowserRouter } from 'react-router-dom';
-
+import { 
+  createConfig, 
+  webSocket 
+} from 'wagmi'
 import { createWeb3Modal } from '@web3modal/wagmi/react'
 import { defaultWagmiConfig } from '@web3modal/wagmi/react/config'
 import { WagmiProvider } from 'wagmi'
-import { arbitrum, mainnet, polygon, xdc } from 'wagmi/chains'
+import { arbitrum, mainnet, polygon, xdc, sepolia } from 'wagmi/chains'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactNode } from 'react';
 
@@ -41,9 +44,13 @@ const metadata = {
 
 const chains = [mainnet, arbitrum, polygon, xdc] as const
 const config = defaultWagmiConfig({
-  chains,
+  chains: [mainnet, sepolia],
   projectId,
   metadata,
+  // transports: {
+  //   [mainnet.id]: webSocket('wss://eth-mainnet.g.alchemy.com/v2/...'), 
+  //   [sepolia.id]: webSocket('wss://eth-sepolia.g.alchemy.com/v2/...'), 
+  // },
 })
 
 // 3. Create modal

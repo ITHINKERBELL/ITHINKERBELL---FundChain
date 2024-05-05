@@ -40,7 +40,7 @@ type CampaignId = typeof CampaignId.tsType;
 export type Campaigns = typeof Campaigns.tsType;
 
 // new map testing
-let campaigns = StableBTreeMap<CampaignId, Campaigns>(3);
+let campaigns = StableBTreeMap<CampaignId, Campaigns>(5);
 
 export default Canister({
 

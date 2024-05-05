@@ -7,13 +7,10 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [campaigns, setCampaigns] = useState<any>([]);
 
-  //   const { address, contract, getCampaigns } = useStateContext();
-
   const fetchCampaigns = async () => {
     setIsLoading(true);
 
     project_backend.getAllCampaigns().then((res) => {
-      console.log(res);
       setCampaigns(res);
     });
     setIsLoading(false);
