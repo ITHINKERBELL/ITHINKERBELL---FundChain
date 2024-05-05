@@ -27,7 +27,7 @@ const DisplayCampaigns = ({
         {title} ({campaigns.length})
       </h1>
 
-      <div className="flex flex-wrap mt-[20px] gap-[26px]">
+      <div className="flex flex-col mt-10 gap-[26px] mb-10">
         {isLoading && (
           <img
             src={loader}
@@ -44,8 +44,9 @@ const DisplayCampaigns = ({
         )}
 
         {!isLoading &&
-          campaigns.length > 0 &&
-          campaigns.map((campaign: any, index: number) => (
+          // campaigns.length > 0 &&
+          // campaigns.map((campaign: any, index: number) => (
+          campaigns.slice(0).reverse().map((campaign: any, index: number) => (
             <FundCard
               key={campaign.id} // Assuming campaign.id exists and is unique
               {...campaign}
