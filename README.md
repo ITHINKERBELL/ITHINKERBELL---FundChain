@@ -75,13 +75,16 @@ If you are hosting frontend code somewhere without using DFX, you may need to ma
 - Write your own `createActor` constructor
 
 ## Milestone 
-- [x]Brainstorming
-- [x]Figma UI/UX
-- [x]React and Azle Integration
-- [x]Decentralized Wallet Integration
-- [x]Working Transactions
-- [x]Transaction History
-- [ ]Top Donors
-  
+[x]Brainstorming
+[x]Figma UI/UX
+[x]React and Azle Integration
+[x]Decentralized Wallet Integration
+[x]Working Transactions
+[x]Transaction History
+[ ]Top Donors
+
 ## References
 ![Internet Computer](https://internetcomputer.org/)
+https://wagmi.sh/
+https://docs.walletconnect.com/
+https://demergent-labs.github.io/azle/
