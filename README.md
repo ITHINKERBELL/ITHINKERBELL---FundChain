@@ -232,6 +232,7 @@ If you are hosting frontend code somewhere without using DFX, you may need to ma
 - Write your own `createActor` constructor
 
 ## Milestone 
+
 - [x]Brainstorming
 - [x]Figma UI/UX
 - [x]React and Azle Integration
@@ -242,8 +243,17 @@ If you are hosting frontend code somewhere without using DFX, you may need to ma
 - [ ]Real-Time Updates
 - [ ]The Trustee's campaigns inside the Profile Tab including the amount that they've raised
 
+
 ## References
+
 - ![Internet Computer](https://internetcomputer.org/)
 - ![Wagmi](https://wagmi.sh/)
 - ![WalletConnect](https://docs.walletconnect.com/)
 - ![Azle](https://demergent-labs.github.io/azle/)
+
+
+## Contributors
+- ![Jaydeebryann Ang](https://github.com/Arthritisboy)
+- ![Stephen Bautista](https://github.com/Swa-ne)
+- ![Jaira Solis](https://github.com/jairasolis)
+- ![Monica Villanueva](https://github.com/vllnvmonik)
