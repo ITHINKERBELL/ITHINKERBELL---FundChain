@@ -14,6 +14,7 @@ To learn more before you start working with our project, see the following docum
 - [Quick Start](https://internetcomputer.org/docs/current/developer-docs/setup/deploy-locally)
 - [SDK Developer Tools](https://internetcomputer.org/docs/current/developer-docs/setup/install)
 - Here's a live preview of our app that is deployed to the ICP mainnet:[Live Preview](https://k4lg5-iiaaa-aaaag-qjurq-cai.icp0.io/)
+- Here's our video presentation link: https://drive.google.com/drive/folders/1NoMP2tWBtLMQ1XgM5vJn0nQ8cOVCYmas?usp=sharing
 
 
 
