@@ -72,19 +72,18 @@ const config = defaultWagmiConfig({
   chains: [mainnet, sepolia, bbtestnet], 
   projectId,
   metadata,
-  // transports: {
-  //   [mainnet.id]: webSocket('wss://eth-mainnet.g.alchemy.com/v2/...'), 
-  //   [sepolia.id]: webSocket('wss://eth-sepolia.g.alchemy.com/v2/...'), 
-  // },
 })
 
 // 3. Create modal
 createWeb3Modal({
   wagmiConfig: config,
   projectId,
-  enableAnalytics: true, // Optional - defaults to your Cloud configuration
-  enableOnramp: true, // Optional - false as default
-  themeMode: 'light'
+  enableAnalytics: true, 
+  enableOnramp: true, 
+  themeMode: 'light',
+  themeVariables: {
+    '--w3m-accent': '#2d2d2d',
+  }
 });
 
 const rootElement = document.getElementById("root");
