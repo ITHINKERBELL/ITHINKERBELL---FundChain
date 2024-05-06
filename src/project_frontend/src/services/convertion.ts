@@ -9,3 +9,13 @@ export async function convertIdToTitle(id: string) {
         return null;
     }
 }
+
+export async function convertIdToUsername(id: string) {
+    try {
+        const res = await project_backend.getUsernameByWalletAddress(id);
+        return res;
+    } catch (error) {
+        console.error("Error retrieving user's username:", error);
+        return null;
+    }
+}

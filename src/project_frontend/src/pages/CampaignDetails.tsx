@@ -8,6 +8,7 @@ import { calculateBarPercentage } from "../utils";
 import { useAccount, useSendTransaction, useTransactionReceipt } from 'wagmi'
 import { parseEther } from 'viem'
 import { project_backend } from "../../../declarations/project_backend";
+import { convertIdToUsername } from "../services/convertion";
 
 interface Campaign {
   campaignId: string,
@@ -31,6 +32,8 @@ const CampaignDetails: React.FC = () => {
   const { address } = useAccount()
   const [usertype, setUsertype] = useState<string | null>(null);
   const [campaign, setCampaign] = useState<any | null>({});
+  const [username, setUsername] = useState<any>([]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -55,12 +58,26 @@ const CampaignDetails: React.FC = () => {
     fetchData();
   }, [address, state])
 
-
   const [isLoading, setIsLoading] = useState(false);
   const [amount, setAmount] = useState("");
   const [donators, setDonators] = useState<
     { donator: string; donation: number }[]
   >([]);
+
+  useEffect(() => {
+    if (campaign.donators && campaign.donators.length > 0) {
+      campaign.donators.map((data: any, idx: any) => {
+        setDonators((prevState: any) => [...prevState, { donator: data, donation: campaign.donations[idx] }])
+      })
+    }
+    const fetchData = async () => {
+      const username = await Promise.all(campaign.donators.map((id: any) => convertIdToUsername(id)));
+      setUsername(username);
+    };
+    if (campaign.donators && campaign.donators.length > 0) {
+      fetchData();
+    }
+  }, [campaign])
 
   const remainingDays = daysLeft(new Date(campaign.deadline));
   // const fetchDonators = async () => {
@@ -201,7 +218,7 @@ const CampaignDetails: React.FC = () => {
                     className="flex justify-between items-center gap-4"
                   >
                     <p className="font-epilogue font-normal text-[16px] text-[#b2b3bd] leading-[26px] break-ll">
-                      {index + 1}. {item.donator}
+                      {index + 1}. {username[index]}
                     </p>
                     <p className="font-epilogue font-normal text-[16px] text-[#808191] leading-[26px] break-ll">
                       {item.donation}
